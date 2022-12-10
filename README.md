@@ -6,7 +6,7 @@ This is a source code of the list for Finnish Mastodon users. Currently manually
 
 ## How to add yourself to the list
 
-If you are **a non-techincal person**: Send a message to [@rolle@mementomori.social](https://mementomori.social/@rolle).
+If you are **a non-technical person**: Send a message to [@rolle@mementomori.social](https://mementomori.social/@rolle).
 
 If you are **a technical person or a coder**:
 
