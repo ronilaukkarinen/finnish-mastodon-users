@@ -9,32 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
-<script>
-  addEventListener('DOMContentLoaded', (event) => {
-    // Count list items
-    const userList = document.getElementById('user-list');
-    console.log(userList);
-    const listItem = userList.getElementsByTagName('li');
-    const userCount = listItem.length;
-
-    // Add user count to element
-    const userCountElement = document.getElementById('user-count');
-    userCountElement.innerHTML = userCount;
-
-    // Last updated
-    moment.locale('fi');
-    const lastUpdated = '2022-12-10T14:38:00+02:00';
-    const lastUpdatedDate = moment(lastUpdated);
-    const lastUpdatedElement = document.getElementById('updated');
-
-    // Add last updated in textual format to element title attribute
-    lastUpdatedElement.setAttribute('title', lastUpdatedDate.format('LLLL'));
-
-    // Last updated from now
-    const lastUpdatedFromNow = lastUpdatedDate.fromNow();
-    lastUpdatedElement.innerHTML = lastUpdatedFromNow;
-  });
-</script>
 <style type="text/css">
 :root {
   --color-gunmetal: #282c37;
@@ -324,11 +298,44 @@ button[aria-controls="instructions"]:hover {
         <a href="https://mementomori.social/@mustikkasoppa" title="mustikkasoppa" class="status__display-name" target="_blank" rel="noopener noreferrer"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="https://mementomori.social/system/accounts/avatars/109/451/054/287/958/963/original/adb2ec9280ab6ed0.png" alt="mustikkasoppa"></div></div><span class="display-name"><bdi><strong class="display-name__html">Veera Laukkarinen</strong></bdi> <span class="display-name__account">@mustikkasoppa@mementomori.social</span></span></a>
         <a href="https://mementomori.social/@mustikkasoppa" class="button">Seuraa</a>
       </li>
+      <li>
+        <a href="https://mastodon.lol/@menneisyytesi" title="menneisyytesi" class="status__display-name" target="_blank" rel="noopener noreferrer"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="https://media.mastodon.lol/accounts/avatars/109/247/540/374/020/780/original/1860d81b8a1bb653.png" alt="menneisyytesi"></div></div><span class="display-name"><bdi><strong class="display-name__html">Paskajärven kaunis Charlotta</strong></bdi> <span class="display-name__account">@menneisyytesi@mastodon.lol</span></span></a>
+        <a href="https://mastodon.lol/@menneisyytesi" class="button">Seuraa</a>
+      </li>
     </ul>
+
+
 
   </section>
 
   <footer>
     <p>Käsin koodattu ja <a href="https://github.com/ronilaukkarinen/suomalaiset-mastodon-kayttajat">avointa lähdekoodia</a>. <span class="updated">Päivitetty viimeksi <time id="updated"></time>.</span></p>
   </footer>
+
+  <script>
+    addEventListener('DOMContentLoaded', (event) => {
+      // Count list items
+      const userList = document.getElementById('user-list');
+      console.log(userList);
+      const listItem = userList.getElementsByTagName('li');
+      const userCount = listItem.length;
+
+      // Add user count to element
+      const userCountElement = document.getElementById('user-count');
+      userCountElement.innerHTML = userCount;
+
+      // Last updated
+      moment.locale('fi');
+      const lastUpdated = '2022-12-10T14:49:00+02:00';
+      const lastUpdatedDate = moment(lastUpdated);
+      const lastUpdatedElement = document.getElementById('updated');
+
+      // Add last updated in textual format to element title attribute
+      lastUpdatedElement.setAttribute('title', lastUpdatedDate.format('LLLL'));
+
+      // Last updated from now
+      const lastUpdatedFromNow = lastUpdatedDate.fromNow();
+      lastUpdatedElement.innerHTML = lastUpdatedFromNow;
+    });
+  </script>
 </body>
