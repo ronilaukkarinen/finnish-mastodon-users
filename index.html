@@ -1,0 +1,321 @@
+<!doctype html>
+<html>
+<head>
+<title>Suomalaiset Mastodon-käyttäjät</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"></script>
+<script>
+  addEventListener('DOMContentLoaded', (event) => {
+    // Count list items
+    const userList = document.getElementById('user-list');
+    console.log(userList);
+    const listItem = userList.getElementsByTagName('li');
+    const userCount = listItem.length;
+
+    // Add user count to element
+    const userCountElement = document.getElementById('user-count');
+    userCountElement.innerHTML = userCount;
+
+    // Last updated
+    moment.locale('fi');
+    const lastUpdated = '2022-12-10T13:43:00+02:00';
+    const lastUpdatedDate = moment(lastUpdated);
+    const lastUpdatedElement = document.getElementById('updated');
+
+    // Add last updated in textual format to element title attribute
+    lastUpdatedElement.setAttribute('title', lastUpdatedDate.format('LLLL'));
+
+    // Last updated from now
+    const lastUpdatedFromNow = lastUpdatedDate.fromNow();
+    lastUpdatedElement.innerHTML = lastUpdatedFromNow;
+  });
+</script>
+<style type="text/css">
+:root {
+  --color-gunmetal: #282c37;
+  --color-eerie-black: #191c22;
+  --color-lotion: #fafafa;
+  --color-violets-are-blue: #8c8dff;
+  --color-white: #fff;
+  --color-dark-electric-blue: #606984;
+  --color-very-light-blue: #595aff;
+  --color-very-light-blue-highlight: #6364ff;
+  --color-wild-blue-yonder: #9baec8;
+}
+
+a {
+  color: var(--color-violets-are-blue);
+  text-decoration: none;
+}
+
+a:focus,
+a:hover {
+  text-decoration: underline;
+}
+
+
+body {
+  background-color: var(--color-eerie-black);
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  margin: 8px;
+}
+
+footer,
+section {
+  background-color: var(--color-gunmetal);
+  border-radius: 4px;
+  color: var(--color-lotion);
+  max-width: calc(580px - calc(2 * 16px));
+  margin: 40px auto 0 auto;
+  padding: 16px;
+}
+
+@media (max-width: 900px) {
+  section {
+    margin: 8px auto 0 auto;
+  }
+}
+
+footer {
+  background-color: transparent;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 20px auto;
+}
+
+footer p {
+  font-size: 13px;
+  color: var(--color-dark-electric-blue);
+  margin: 0;
+}
+
+footer a {
+  color: var(--color-dark-electric-blue);
+  text-decoration: underline;
+}
+
+footer a:focus,
+footer a:hover {
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 22px;
+  margin-top: 0;
+  margin-bottom: 0;
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 22px;
+  margin-top: 22px;
+}
+
+ul.user-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+
+ul.user-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+/* Mastodon */
+.account__avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 4px;
+  background: transparent no-repeat;
+  background-position: 50%;
+  background-clip: padding-box;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.account__avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.status__display-name {
+  max-width: 100%;
+  display: flex;
+  font-size: 15px;
+  line-height: 22px;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.display-name {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.display-name bdi {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.display-name__html {
+  font-weight: 500;
+}
+
+.account__display-name strong,
+.status__display-name strong {
+  color: var(--color-white);
+}
+
+.status__display-name .display-name__account {
+  white-space: nowrap;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.emojione {
+  vertical-align: middle;
+  -o-object-fit: contain;
+  object-fit: contain;
+  margin: -.2ex 0.15em .2ex;
+  width: 16px;
+  height: 16px;
+}
+
+.status__display-name {
+  color: var(--color-dark-electric-blue);
+}
+
+.status__display-name:hover,
+.status__display-name:focus {
+  text-decoration: none;
+}
+
+.status__display-name:hover .display-name__html,
+.status__display-name:focus .display-name__html {
+  text-decoration: underline;
+}
+
+.button {
+  background-color: var(--color-very-light-blue);
+  border: 10px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--color-white);
+  cursor: pointer;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
+  overflow: hidden;
+  padding: 7px 18px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: auto;
+}
+
+.button:focus,
+.button:hover {
+  background: var(--color-very-light-blue-highlight);
+  text-decoration: none;
+}
+
+button[aria-controls="instructions"] {
+  background: transparent;
+  border: none;
+  color: var(--color-wild-blue-yonder);
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+button[aria-controls="instructions"]:focus,
+button[aria-controls="instructions"]:hover {
+  background: transparent;
+  text-decoration: underline;
+}
+</style>
+<body>
+  <section>
+    <h1>
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 512 512"><path fill="currentColor" d="M64 144c26.5 0 48-21.5 48-48s-21.5-48-48-48S16 69.5 16 96s21.5 48 48 48zM192 64c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zm0 160c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H192zM64 464c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm48-208c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48z"/></svg>Suomalaiset Mastodon-käyttäjät</h1>
+    <p>Koska Mastodonin käyttäjiä on alkuun hieman hankala löytää palvelun hajautuksen vuoksi, olen kasannut tähän listan suomalaisista käyttäjistä eri instansseilta, käyttäjien itsensä suostumuksella. Listaa päivitetään säännöllisesti.</p>
+
+    <!-- Accessible show instructions toggle -->
+    <button class="button" id="show-instructions" aria-expanded="false" aria-controls="instructions"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 512 512"><path fill="currentColor" d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256S114.6 512 256 512zM169.8 165.3c7.9-22.3 29.1-37.3 52.8-37.3h58.3c34.9 0 63.1 28.3 63.1 63.1c0 22.6-12.1 43.5-31.7 54.8L280 264.4c-.2 13-10.9 23.6-24 23.6c-13.3 0-24-10.7-24-24V250.5c0-8.6 4.6-16.5 12.1-20.8l44.3-25.4c4.7-2.7 7.6-7.7 7.6-13.1c0-8.4-6.8-15.1-15.1-15.1H222.6c-3.4 0-6.4 2.1-7.5 5.3l-.4 1.2c-4.4 12.5-18.2 19-30.6 14.6s-19-18.2-14.6-30.6l.4-1.2zM288 352c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>Haluatko listalle? Kuinka seurata? Katso ohjeet</button>
+
+    <script>
+      addEventListener('DOMContentLoaded', (event) => {
+        const showInstructions = document.getElementById('show-instructions');
+        const instructions = document.getElementById('instructions');
+
+        showInstructions.addEventListener('click', (event) => {
+          const isExpanded = showInstructions.getAttribute('aria-expanded') === 'true' || false;
+
+          // Hidden attribute toggle
+          instructions.hidden = !instructions.hidden;
+
+          showInstructions.setAttribute('aria-expanded', !isExpanded);
+          instructions.setAttribute('aria-hidden', isExpanded);
+        });
+      });
+    </script>
+
+    <div id="instructions" aria-hidden="true" hidden>
+      <h2>Ilmoita itsesi listalle</h2>
+      <p>Lista toimii suostumusperiaatteella. En lisää ketään ilman käyttäjän itsensä lupaa. Haluatko listalle? Lähetä käyttäjälle <a href="https://mementomori.social/@rolle">@rolle@mementomori.social</a> yksityisviesti tai julkinen vastaus postaukseen. Tätä listaa ei jaeta missään muualla kuin tässä URL-osoitteessa ja listan käyttäminen muihin kuin Mastodonissa seurantaan on kielletty.</p>
+
+      <h2>Kuinka seurata listan käyttäjiä</h2>
+
+      <p>Jos haluat seurata kaikkia käyttäjiä kerralla, <a href="following_accounts.csv">lataa CSV-tiedosto tästä</a> ja tuo se asetuksiisi kohdasta <b>Asetukset &rarr; Tuo / Vie &rarr; Tuo &rarr; Seurattujen lista</b>. Jos yksitellen, lataa <a href="https://github.com/raikasdev/mastodon4-redirect">Mastodon redirect-lisäosa</a>, syötä instanssisi tiedot ja klikkaa alta Seuraa-nappia, sitten ohjauksen jälkeen uudelleen Seuraa-nappia omassa instanssissasi.</p>
+    </div>
+
+    <h2>Käyttäjät (<span class="user-count" id="user-count"></span>)</h2>
+
+    <ul class="user-list" id="user-list">
+      <li>
+        <a href="https://mementomori.social/@rolle" title="rolle" class="status__display-name" target="_blank" rel="noopener noreferrer"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="https://mementomori.social/system/accounts/avatars/109/293/050/593/156/468/original/5db03635a60c9115.jpg" alt="rolle"></div></div><span class="display-name"><bdi><strong class="display-name__html">Roni Laukkarinen <img draggable="false" class="emojione custom-emoji" alt=":verified_reaper:" title=":verified_reaper:" src="https://mementomori.social/system/custom_emojis/images/000/008/808/original/18b2c7355b64d397.png" data-original="https://mementomori.social/system/custom_emojis/images/000/008/808/original/18b2c7355b64d397.png" data-static="https://mementomori.social/system/custom_emojis/images/000/008/808/static/18b2c7355b64d397.png"></strong></bdi> <span class="display-name__account">@rolle</span></span></a>
+        <a href="https://mementomori.social/@rolle" class="button">Seuraa</a>
+      </li>
+      <li>
+        <a href="https://mementomori.social/@dude" title="dude" class="status__display-name" target="_blank" rel="noopener noreferrer"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="https://mementomori.social/system/accounts/avatars/109/416/680/758/274/891/original/03ef2277ebf8da44.jpg" alt="dude"></div></div><span class="display-name"><bdi><strong class="display-name__html">Digitoimisto Dude Oy</strong></bdi> <span class="display-name__account">@dude</span></span></a>
+        <a href="https://mementomori.social/@dude" class="button">Seuraa</a>
+      </li>
+    </ul>    
+    
+  </section>
+
+  <footer>
+    <p>Käsin koodattu ja <a href="https://github.com/ronilaukkarinen/suomalaiset-mastodon-kayttajat">avointa lähdekoodia</a>. <span class="updated">Päivitetty viimeksi <time id="updated"></time>.</span></p>
+  </footer>
+</body>
