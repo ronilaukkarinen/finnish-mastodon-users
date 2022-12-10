@@ -303,8 +303,16 @@ button[aria-controls="instructions"]:hover {
         <a href="https://mastodon.lol/@menneisyytesi" class="button">Seuraa</a>
       </li>
     </ul>
+    <script>
+      // Last updated date
+      const lastUpdatedDate = '2022-12-10';
 
+      // Last updated time in HH:mm
+      const lastUpdatedTime = '14:59';
 
+      // Full datetime
+      const lastUpdated = lastUpdatedDate + 'T' + lastUpdatedTime + '+02:00';
+    </script>
 
   </section>
 
@@ -326,7 +334,6 @@ button[aria-controls="instructions"]:hover {
 
       // Last updated
       moment.locale('fi');
-      const lastUpdated = '2022-12-10T14:49:00+02:00';
       const lastUpdatedDate = moment(lastUpdated);
       const lastUpdatedElement = document.getElementById('updated');
 
