@@ -110,6 +110,12 @@ h2 {
   margin-top: 22px;
 }
 
+h3 {
+  font-size: 16px;
+  margin-bottom: 22px;
+  margin-top: 22px;
+}
+
 ul.user-list {
   display: grid;
   gap: 10px;
@@ -129,6 +135,15 @@ ul.user-list li {
   margin-top: 16px;
   margin-bottom: 0;
   opacity: .6;
+}
+
+div#instructions ul,
+div#instructions ol {
+  padding-left: 16px;
+  display: grid;
+  gap: 16px;
+  margin-bottom: 27px;
+  margin-top: 27px;
 }
 
 /* Mastodon */
@@ -333,9 +348,17 @@ button[aria-controls="instructions"]:hover {
 
       <h2>Kuinka seurata listan käyttäjiä</h2>
 
-      <p><b>Jos haluat seurata käyttäjiä yksitellen</b>, kätevin tapa on ladata <a href="https://github.com/raikasdev/mastodon4-redirect">Mastodon Redirect</a>, syöttää instanssisi tiedot ja klikata alta Seuraa-nappia, sitten ohjauksen jälkeen uudelleen Seuraa-nappia omassa instanssissasi. Toinen tapa on käyttää <a href="https://fo.llow.social/roam">Roam Chrome-lisäosaa</a>, jolla voit seurata klikkaamalla nappia profiilissa.</p>
+      <h3>Jos haluat seurata käyttäjiä yksitellen</b>, tähän löytyy useampi tapa:</h3>
 
-      <p><b>Jos haluat seurata kaikkia käyttäjiä kerralla</b>, lataa CSV-tiedosto alta ja tuo se asetuksiisi kohdasta <b>Asetukset &rarr; Tuo / Vie &rarr; Tuo &rarr; Seurattujen lista</b>.</p>
+      <ul>
+        <li>Kopioi seurattavan ihmisen profiilin koko osoite leikepöydälle. Tämän jälkeen laita se Mastodon-instanssisi tai sovelluksesi hakuun (usein <b>Selaa</b> alta). Käyttäjän löytyessä klikkaa <b>Seuraa</b>.</li>
+        <li>Lataa Mastodon Redirect -lisäosa <a href="https://addons.mozilla.org/en-US/firefox/addon/mastodon4-redirect/">Firefoxille</a> tai <a href="https://chrome.google.com/webstore/detail/mastodon4-redirect/acbfckpoogjdigldffcbldijhgnjpfnc">Chromelle</a>. Laita lisäosan asetuksiin oman instanssisi URL-osoite. Tämän jälkeen klikkaa alta <b>Seuraa</b>, jonka jälkeen sinut ohjataan käyttäjän profiiliin, josta voit klikata <b>Seuraa</b> suoraan onnistuneesti.</li>
+        <li>Lataa <a href="https://fo.llow.social/roam">Roam Chrome-lisäosa</a> ja laita asetuksiin oman instanssisi osoite. Klikkaa alta <b>Seuraa</b>, sitten klikkaa lisäosan kuvaketta, josta pääset seuraamaan nappia painamalla.</li>
+      </ul>
+
+      <h3>Jos haluat seurata kaikkia käyttäjiä kerralla</h3>
+
+      <p>Lataa CSV-tiedosto alta ja tuo se asetuksiisi kohdasta <b>Asetukset &rarr; Tuo / Vie &rarr; Tuo &rarr; Seurattujen lista</b>.</p>
 
       <p>
         <a href="following_accounts.csv" class="button">Lataa CSV</a>
