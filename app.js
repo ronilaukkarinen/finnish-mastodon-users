@@ -23,12 +23,14 @@ function parseCSV() {
       var instance = user.split("@")[1];
       var request = new XMLHttpRequest();
 
+      // Get user info
+      request.open("GET", "https://"+instance+"/api/v1/accounts/lookup?acct="+user, false);
+
       // Cache requests for 30 minutes
       request.setRequestHeader("Cache-Control", "max-age=1800");
 
-      // Get user info
-      request.open("GET", "https://"+instance+"/api/v1/accounts/lookup?acct="+user, false);
       request.send(null);
+
       var json = JSON.parse(request.responseText);
       document.getElementById("user-list").innerHTML += `<li><a href="https://${instance}/@${acct}" title="rolle" class="status__display-name" rel="noopener noreferrer"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="${json.avatar}" alt="${acct}"></div></div><span class="display-name"><bdi><strong class="display-name__html">${json.display_name}</strong></bdi> <span class="display-name__account">${user}</span></span></a><a href="https://${instance}/@${acct}" class="button">Seuraa</a></li>`;
       counter++;
