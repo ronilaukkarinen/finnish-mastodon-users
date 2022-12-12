@@ -22,6 +22,11 @@ function parseCSV() {
       var acct = user.split("@")[0];
       var instance = user.split("@")[1];
       var request = new XMLHttpRequest();
+
+      // Cache requests for 30 minutes
+      request.setRequestHeader("Cache-Control", "max-age=1800");
+
+      // Get user info
       request.open("GET", "https://"+instance+"/api/v1/accounts/lookup?acct="+user, false);
       request.send(null);
       var json = JSON.parse(request.responseText);
