@@ -29,22 +29,7 @@ $(document).ready(() => {
                   });
               }
           } catch (e) {}
-          // Append accessible item to user-list
-          $("#user-list").append(`
-            <li class="user-list-item">
-              <a href="https://${instance}/@${acct}" class="status__display-name" aria-label="${display_name} @${acct} @${instance}">
-                <div class="status__avatar">
-                  <div class="status__avatar" style="width: 46px; height: 46px;">
-                    <img src="${json.avatar}" alt="Avatar for ${display_name} @${acct} @${instance}">
-                  </div>
-                </div>
-
-                <span class="display-name"><bdi><strong class="display-name__html">${display_name}</strong></bdi>
-                <span class="display-name__account">@${acct}</span></span>
-                </a>
-                <a href="https://${instance}/@${acct}" class="button">Seuraa</a>
-            </li>
-          `);
+          $("#user-list").append(`<li><a href="https://${instance}/@${acct}" class="status__display-name" aria-label="Seuraa käyttäjää ${user}"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="${json.avatar}" alt="Käyttäjäkuva käyttäjälle ${acct}"></div></div><span class="display-name"><bdi><strong class="display-name__html">${display_name}</strong></bdi> <span class="display-name__account">${user}</span></span></a><a tabindex="-1" aria-hidden="true" href="https://${instance}/@${acct}" class="button">Seuraa</a></li>`);
         });
         counter++;
 
