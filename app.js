@@ -1,5 +1,11 @@
 // User list
 $(document).ready(() => {
+  // Update aria-busy for user-count
+  $("#user-count").attr("aria-busy", "true");
+
+  // Update aria-busy for user-list
+  $("#user-list").attr("aria-busy", "true");
+
   // Parse CSV and add users
   $.get("following_accounts.csv", (result) => {
     let csv = result;
@@ -23,10 +29,32 @@ $(document).ready(() => {
                   });
               }
           } catch (e) {}
-          $("#user-list").append(`<li><a href="https://${instance}/@${acct}" title="rolle" class="status__display-name" rel="noopener noreferrer"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="${json.avatar}" alt="${acct}"></div></div><span class="display-name"><bdi><strong class="display-name__html">${display_name}</strong></bdi> <span class="display-name__account">${user}</span></span></a><a href="https://${instance}/@${acct}" class="button">Seuraa</a></li>`);
+          // Append accessible item to user-list
+          $("#user-list").append(`
+            <li class="user-list-item">
+              <a href="https://${instance}/@${acct}" class="status__display-name" aria-label="${display_name} @${acct} @${instance}">
+                <div class="status__avatar">
+                  <div class="status__avatar" style="width: 46px; height: 46px;">
+                    <img src="${json.avatar}" alt="Avatar for ${display_name} @${acct} @${instance}">
+                  </div>
+                </div>
+
+                <span class="display-name"><bdi><strong class="display-name__html">${display_name}</strong></bdi>
+                <span class="display-name__account">@${acct}</span></span>
+                </a>
+                <a href="https://${instance}/@${acct}" class="button">Seuraa</a>
+            </li>
+          `);
         });
         counter++;
+
+        // Update aria-busy for user-list
+        $("#user-list").attr("aria-busy", "false");
+
         $("#user-count").html(counter);
+
+        // Update aria-busy for user-count
+        $("#user-count").attr("aria-busy", "false");
       }
     });
   });
