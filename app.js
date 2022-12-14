@@ -42,13 +42,16 @@ $(document).ready(() => {
 
         $.getJSON("https://"+instance+"/api/v1/accounts/lookup?acct="+user, (json) => {
           let display_name = json.display_name;
+          let bio = json.note;
           display_name = twemoji.parse(display_name, {className: "emojione"});
+          bio = twemoji.parse(bio, {className: "emojione"});
           try {
-              if (json.emojis.length > 0) {
-                  json.emojis.forEach(dp_emoji => {
-                      display_name = display_name.replaceAll(`:${dp_emoji.shortcode}:`, `<img src="${dp_emoji.url}" alt="Emoji ${dp_emoji.shortcode}" class="emojione">`);
-                  });
-              }
+            if (json.emojis.length > 0) {
+              json.emojis.forEach(dp_emoji => {
+                display_name = display_name.replaceAll(`:${dp_emoji.shortcode}:`, `<img src="${dp_emoji.url}" alt="Emoji ${dp_emoji.shortcode}" class="emojione">`);
+                bio = bio.replaceAll(`:${dp_emoji.shortcode}:`, `<img src="${dp_emoji.url}" alt="Emoji ${dp_emoji.shortcode}" class="emojione">`);
+              });
+            }
           } catch (e) {}
           // Append simple user list item to user-list
           // $("#user-list").append(`<li><a href="https://${instance}/@${acct}" class="status__display-name" aria-label="Seuraa käyttäjää ${user}"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="${json.avatar}" alt="Käyttäjäkuva käyttäjälle ${acct}"></div></div><span class="display-name"><bdi><strong class="display-name__html">${display_name}</strong></bdi> <span class="display-name__account">${user}</span></span></a><a tabindex="-1" aria-hidden="true" href="https://${instance}/@${acct}" class="button">Seuraa</a></li>`);
@@ -74,7 +77,7 @@ $(document).ready(() => {
               </div>\
             </a>\
             <div class="account-card__bio">\
-              ${json.note}\
+              ${bio}\
             </div>\
             <div class="account-card__actions">\
               <div class="account-card__counters">\
