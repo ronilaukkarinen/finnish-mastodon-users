@@ -19,6 +19,27 @@ $(document).ready(() => {
         let user = parts[0];
         let acct = user.split("@")[0];
         let instance = user.split("@")[1];
+
+        // Exceptions for vivaldi.net and testausserveri.fi
+        // Add instances to array
+        let instanceExceptions = [
+          "vivaldi.net",
+          "mastodon.ellipsis.fi",
+          "mastodon.testausserveri.fi",
+          "masto.henkkalaukka.fi",
+        ];
+
+        // Check if instance is in array
+        if (instanceExceptions.includes(instance)) {
+          // If instance is in array, change user to acct
+          user = acct;
+
+          // Exception for vivaldi.net
+          if ( instance === "vivaldi.net" ) {
+            instance = "social.vivaldi.net";
+          }
+        }
+
         $.getJSON("https://"+instance+"/api/v1/accounts/lookup?acct="+user, (json) => {
           let display_name = json.display_name;
           display_name = twemoji.parse(display_name, {className: "emojione"});
