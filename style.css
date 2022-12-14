@@ -256,8 +256,12 @@ button[aria-controls="instructions"]:hover {
   word-wrap: break-word;
 }
 
-.account-card__bio p {
-  margin: 0;
+.account-card__bio p:first-child {
+  margin-top: 0;
+}
+
+.account-card__bio p:last-child {
+  margin-bottom: 0;
 }
 
 .account-card__title {
