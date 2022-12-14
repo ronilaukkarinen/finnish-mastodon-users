@@ -248,7 +248,7 @@ button[aria-controls="instructions"]:hover {
   font-size: 15px;
   line-height: 21px;
   margin: 8px 0;
-  max-height: 42px;
+  /* max-height: 42px; */
   overflow: hidden;
   padding: 0 15px;
   position: relative;
