@@ -346,8 +346,8 @@ button[aria-controls="instructions"]:hover {
 }
 
 .account-card__title .display-name bdi {
-  display: block;
   color: var(--color-white);
+  display: block;
   font-weight: 700;
 }
 
@@ -390,5 +390,11 @@ button[aria-controls="instructions"]:hover {
 
   footer {
     margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 430px) {
+  .account-card {
+    max-width: calc(100vw - calc(calc(16px * 2) + 16px));
   }
 }
