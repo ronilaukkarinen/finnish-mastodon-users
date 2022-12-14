@@ -1,290 +1,394 @@
+/* stylelint-disable a11y/font-size-is-readable */
 :root {
-    --color-gunmetal: #282c37;
-    --color-eerie-black: #191c22;
-    --color-lotion: #fafafa;
-    --color-violets-are-blue: #8c8dff;
-    --color-white: #fff;
-    --color-dark-electric-blue: #606984;
-    --color-very-light-blue: #595aff;
-    --color-very-light-blue-highlight: #6364ff;
-    --color-wild-blue-yonder: #9baec8;
-  }
+  --color-gunmetal: #282c37;
+  --color-eerie-black: #191c22;
+  --color-lotion: #fafafa;
+  --color-violets-are-blue: #8c8dff;
+  --color-white: #fff;
+  --color-dark-electric-blue: #606984;
+  --color-very-light-blue: #595aff;
+  --color-very-light-blue-highlight: #6364ff;
+  --color-wild-blue-yonder: #9baec8;
+  --color-arsenic: #393f4f;
+  --color-eerie-black: #17191f;
+}
 
-  a {
-    color: var(--color-violets-are-blue);
-    text-decoration: none;
-  }
+a {
+  color: var(--color-violets-are-blue);
+  text-decoration: none;
+}
 
-  a:focus,
-  a:hover {
-    text-decoration: underline;
-  }
+a:focus,
+a:hover {
+  text-decoration: underline;
+}
 
+body {
+  background-color: var(--color-eerie-black);
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  margin: 8px;
+}
 
-  body {
-    background-color: var(--color-eerie-black);
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell, Helvetica Neue, sans-serif;
-    font-size: 15px;
-    line-height: 1.4;
-    margin: 8px;
-  }
+footer,
+section {
+  background-color: var(--color-gunmetal);
+  border-radius: 4px;
+  color: var(--color-lotion);
+  margin: 40px auto 0;
+  max-width: calc(580px - calc(2 * 10px));
+  padding: 16px;
+}
 
-  footer,
+@media (max-width: 900px) {
   section {
-    background-color: var(--color-gunmetal);
-    border-radius: 4px;
-    color: var(--color-lotion);
-    max-width: calc(580px - calc(2 * 16px));
-    margin: 40px auto 0 auto;
-    padding: 16px;
+    margin: 8px auto 0;
   }
+}
 
-  @media (max-width: 900px) {
-    section {
-      margin: 8px auto 0 auto;
-    }
-  }
+footer {
+  background-color: transparent;
+  margin: 20px auto 40px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
 
-  footer {
-    background-color: transparent;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin: 20px auto 40px;
-  }
+/* stylelint-disable-next-line */
+footer p {
+  color: var(--color-dark-electric-blue);
+  font-size: 13px;
+  margin: 0;
+}
 
-  footer p {
-    font-size: 13px;
-    color: var(--color-dark-electric-blue);
-    margin: 0;
-  }
+footer a {
+  color: var(--color-dark-electric-blue);
+  text-decoration: underline;
+}
 
-  footer a {
-    color: var(--color-dark-electric-blue);
-    text-decoration: underline;
-  }
+footer a:focus,
+footer a:hover {
+  text-decoration: none;
+}
 
-  footer a:focus,
-  footer a:hover {
-    text-decoration: none;
+h1 {
+  align-items: center;
+  display: inline-flex;
+  font-size: 22px;
+  gap: 12px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 18px;
+  margin-bottom: 22px;
+  margin-top: 22px;
+}
+
+h3 {
+  font-size: 16px;
+  margin-bottom: 22px;
+  margin-top: 22px;
+}
+
+ul.user-list {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.queue {
+  margin-bottom: 0;
+  margin-top: 16px;
+  opacity: .6;
+}
+
+div#instructions ul,
+div#instructions ol {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 27px;
+  margin-top: 27px;
+  padding-left: 10px;
+}
+
+/* Mastodon generic */
+.status__display-name {
+  align-items: center;
+  color: var(--color-dark-electric-blue);
+  display: flex;
+  font-size: 15px;
+  gap: 10px;
+  line-height: 22px;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.display-name {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.display-name bdi {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.display-name__html {
+  font-weight: 500;
+}
+
+.account__display-name strong,
+.status__display-name strong {
+  color: var(--color-white);
+}
+
+.status__display-name .display-name__account {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.emojione {
+  height: 16px;
+  margin: -.2ex .15em .2ex;
+  object-fit: contain;
+  vertical-align: middle;
+  width: 16px;
+}
+
+.status__display-name:hover,
+.status__display-name:focus {
+  text-decoration: none;
+}
+
+.status__display-name:hover .display-name__html,
+.status__display-name:focus .display-name__html {
+  text-decoration: underline;
+}
+
+.button {
+  background-color: var(--color-very-light-blue);
+  border: 10px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--color-white);
+  cursor: pointer;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0;
+  overflow: hidden;
+  padding: 7px 18px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: auto;
+}
+
+.button:focus,
+.button:hover {
+  background-color: var(--color-very-light-blue-highlight);
+  text-decoration: none;
+}
+
+button[aria-controls="instructions"] {
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  color: var(--color-wild-blue-yonder);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 15px;
+  font-weight: 500;
+  gap: 10px;
+  padding: 0;
+  text-align: left;
+  white-space: unset;
+}
+
+button[aria-controls="instructions"]:focus,
+button[aria-controls="instructions"]:hover {
+  background-color: transparent;
+  text-decoration: underline;
+}
+
+/* Account card */
+.account-card {
+  background-color: var(--color-arsenic);
+}
+
+.account-card__header img {
+  background-color: var(--color-eerie-black);
+  display: block;
+  height: 100%;
+  margin: 0;
+  -o-object-fit: cover;
+  object-fit: cover;
+  width: 100%;
+}
+
+.account-card__header {
+  border-radius: 4px;
+  height: 128px;
+  padding: 4px;
+}
+
+.account-card__bio {
+  font-size: 15px;
+  line-height: 21px;
+  margin: 8px 0;
+  max-height: 42px;
+  overflow: hidden;
+  padding: 0 15px;
+  position: relative;
+  text-overflow: ellipsis;
+  word-wrap: break-word;
+}
+
+.account-card__bio p {
+  margin: 0;
+}
+
+.account-card__title {
+  align-items: flex-end;
+  display: flex;
+  margin-top: -23px;
+}
+
+.account-card__title__avatar {
+  padding: 14px;
+}
+
+.account-card__title__avatar img {
+  background-color: var(--color-eerie-black);
+  border: 1px solid var(--color-gunmetal);
+  border-color: var(--color-arsenic);
+  border-radius: 8px;
+  display: block;
+  height: 56px;
+  margin: 0;
+  width: 56px;
+}
+
+.account-card__actions {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.account-card__counters {
+  display: grid;
+  flex: 1 1 auto;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  max-width: 340px;
+  min-width: 195px;
+}
+
+.account-card__counters__item {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 21px;
+  padding: 15px 0;
+  text-align: center;
+}
+
+.account-card__counters__item small {
+  color: var(--color-wild-blue-yonder);
+  display: block;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.account-card__actions__button {
+  flex-shrink: 1;
+  overflow: hidden;
+  padding: 0 15px;
+}
+
+.account__avatar {
+  background-clip: padding-box;
+  background-color: transparent no-repeat;
+  background-position: 50%;
+  border-radius: 4px;
+  display: block;
+  height: 46px;
+  overflow: hidden;
+  position: relative;
+  width: 46px;
+}
+
+.account__avatar img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.account-card__title .display-name {
+  color: var(--color-wild-blue-yonder);
+  font-size: 15px;
+  line-height: 20px;
+  padding-bottom: 15px;
+}
+
+.account-card__title .display-name bdi {
+  display: block;
+  color: var(--color-white);
+  font-weight: 700;
+}
+
+.display-name__html {
+  font-weight: 500;
+}
+
+@media (max-width: 600px) {
+  body,
+  .display-name,
+  .display-name__account,
+  .status__display-name * {
+    font-size: 14px;
   }
 
   h1 {
-    font-size: 22px;
-    margin-top: 0;
-    margin-bottom: 0;
-    display: inline-flex;
-    gap: 12px;
-    align-items: center;
+    align-items: flex-start;
+    font-size: 18px;
   }
 
   h2 {
-    font-size: 18px;
-    margin-bottom: 22px;
-    margin-top: 22px;
+    font-size: 17px;
   }
 
-  h3 {
-    font-size: 16px;
-    margin-bottom: 22px;
-    margin-top: 22px;
-  }
-
-  ul.user-list {
-    display: grid;
-    gap: 10px;
-    margin: 0;
-    list-style: none;
-    padding: 0;
-  }
-
-  ul.user-list li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    justify-content: space-between;
-  }
-
-  .queue {
-    margin-top: 16px;
-    margin-bottom: 0;
-    opacity: .6;
-  }
-
-  div#instructions ul,
-  div#instructions ol {
-    padding-left: 16px;
-    display: grid;
-    gap: 16px;
-    margin-bottom: 27px;
-    margin-top: 27px;
-  }
-
-  /* Mastodon */
-  .account__avatar {
-    width: 46px;
-    height: 46px;
-    border-radius: 4px;
-    background: transparent no-repeat;
-    background-position: 50%;
-    background-clip: padding-box;
-    display: block;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .account__avatar img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    -o-object-fit: cover;
-    object-fit: cover;
-  }
-
-  .status__display-name {
-    max-width: 100%;
-    display: flex;
-    font-size: 15px;
-    line-height: 22px;
-    align-items: center;
-    gap: 10px;
-    overflow: hidden;
-  }
-
-  .display-name {
-    display: block;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .display-name bdi {
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .display-name__html {
-    font-weight: 500;
-  }
-
-  .account__display-name strong,
-  .status__display-name strong {
-    color: var(--color-white);
-  }
-
-  .status__display-name .display-name__account {
-    white-space: nowrap;
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .emojione {
-    vertical-align: middle;
-    -o-object-fit: contain;
-    object-fit: contain;
-    margin: -.2ex 0.15em .2ex;
-    width: 16px;
-    height: 16px;
-  }
-
-  .status__display-name {
-    color: var(--color-dark-electric-blue);
-  }
-
-  .status__display-name:hover,
-  .status__display-name:focus {
-    text-decoration: none;
-  }
-
-  .status__display-name:hover .display-name__html,
-  .status__display-name:focus .display-name__html {
-    text-decoration: underline;
-  }
-
-  .button {
-    background-color: var(--color-very-light-blue);
-    border: 10px;
-    border-radius: 4px;
-    box-sizing: border-box;
-    color: var(--color-white);
-    cursor: pointer;
-    display: inline-block;
-    font-family: inherit;
-    font-size: 15px;
-    font-weight: 500;
-    letter-spacing: 0;
-    overflow: hidden;
-    padding: 7px 18px;
-    position: relative;
-    text-align: center;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    width: auto;
-  }
-
-  .button:focus,
-  .button:hover {
-    background: var(--color-very-light-blue-highlight);
-    text-decoration: none;
+  h1 svg {
+    transform: translateY(2px);
   }
 
   button[aria-controls="instructions"] {
-    align-items: center;
-    background: transparent;
-    border: none;
-    color: var(--color-wild-blue-yonder);
-    cursor: pointer;
-    display: inline-flex;
-    font-size: 15px;
-    font-weight: 500;
-    gap: 10px;
-    padding: 0;
-    text-align: left;
-    white-space: unset;
+    align-items: flex-start;
   }
 
-  button[aria-controls="instructions"]:focus,
-  button[aria-controls="instructions"]:hover {
-    background: transparent;
-    text-decoration: underline;
+  button[aria-controls="instructions"] svg {
+    transform: translateY(2px);
   }
 
-  @media (max-width: 600px) {
-    body,
-    .display-name,
-    .display-name__account,
-    .status__display-name * {
-      font-size: 14px;
-    }
-
-    h1 {
-      font-size: 18px;
-      align-items: flex-start;
-    }
-
-    h2 {
-      font-size: 17px;
-    }
-
-    h1 svg {
-      transform: translateY(2px);
-    }
-
-    button[aria-controls="instructions"] {
-      align-items: flex-start;
-    }
-
-    button[aria-controls="instructions"] svg {
-      transform: translateY(2px);
-    }
-
-    .status__display-name {
-      width: 60vw;
-    }
-
-    footer {
-      margin-bottom: 20px;
-    }
+  .status__display-name {
+    width: 60vw;
   }
+
+  footer {
+    margin-bottom: 20px;
+  }
+}

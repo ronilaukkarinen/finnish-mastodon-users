@@ -29,7 +29,52 @@ $(document).ready(() => {
                   });
               }
           } catch (e) {}
-          $("#user-list").append(`<li><a href="https://${instance}/@${acct}" class="status__display-name" aria-label="Seuraa käyttäjää ${user}"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="${json.avatar}" alt="Käyttäjäkuva käyttäjälle ${acct}"></div></div><span class="display-name"><bdi><strong class="display-name__html">${display_name}</strong></bdi> <span class="display-name__account">${user}</span></span></a><a tabindex="-1" aria-hidden="true" href="https://${instance}/@${acct}" class="button">Seuraa</a></li>`);
+          // Append simple user list item to user-list
+          // $("#user-list").append(`<li><a href="https://${instance}/@${acct}" class="status__display-name" aria-label="Seuraa käyttäjää ${user}"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="${json.avatar}" alt="Käyttäjäkuva käyttäjälle ${acct}"></div></div><span class="display-name"><bdi><strong class="display-name__html">${display_name}</strong></bdi> <span class="display-name__account">${user}</span></span></a><a tabindex="-1" aria-hidden="true" href="https://${instance}/@${acct}" class="button">Seuraa</a></li>`);
+
+          // Append explore__suggestions account-card to user-list
+          $("#user-list").append(`<li class="account-card">\
+            <a class="account-card__permalink" href="https://${instance}/@${acct}" class="status__display-name" aria-label="Seuraa käyttäjää ${user}">\
+              <div class="account-card__header" aria-hidden="true">\
+                <img src="${json.header}" alt="Käyttäjän ${acct} header-kuva">\
+              </div>\
+              <div class="account-card__title">\
+                <div class="account-card__title__avatar">\
+                  <div class="account__avatar" style="width: 56px; height: 56px;">\
+                    <img src="${json.avatar}" alt="Käyttäjän ${acct} profiilikuva">\
+                  </div>
+                </div>\
+                <span class="display-name">\
+                  <bdi>\
+                    <strong class="display-name__html">${display_name}</strong>\
+                  </bdi>\
+                  <span class="display-name__account">${user}</span>\
+                </span>\
+              </div>\
+            </a>\
+            <div class="account-card__bio">\
+              ${json.note}\
+            </div>\
+            <div class="account-card__actions">\
+              <div class="account-card__counters">\
+                <div class="account-card__counters__item">\
+                  <span>${json.statuses_count}</span>\
+                  <small><span>Viestit</span></small>\
+                </div>\
+                <div class="account-card__counters__item">\
+                  <span>${json.following_count}</span>\
+                  <small><span>Seuraajat</span></small>\
+                </div>\
+                <div class="account-card__counters__item">\
+                  <span>${json.followers_count}</span>\
+                  <small><span>Seurataan</span></small>\
+                </div>\
+              </div>\
+              <div class="account-card__actions__button">\
+                <a href="https://${instance}/@${acct}" class="button">Seuraa</a>\
+              </div>\
+            </div>\
+          </li>`);
         });
         counter++;
 

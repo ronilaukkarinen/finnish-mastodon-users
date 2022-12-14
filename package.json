@@ -1,0 +1,24 @@
+{
+  "name": "finnish-mastodon-users",
+  "version": "1.0.0",
+  "description": "This is a source code of the list for Finnish Mastodon users. The visual HTML list populates automatically from the CSV data with a help of Mastodon REST API.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ronilaukkarinen/finnish-mastodon-users.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ronilaukkarinen/finnish-mastodon-users/issues"
+  },
+  "homepage": "https://github.com/ronilaukkarinen/finnish-mastodon-users#readme",
+  "devDependencies": {
+    "@ronilaukkarinen/stylelint-a11y": "^1.2.4",
+    "stylelint": "^14.16.0",
+    "stylelint-order": "^5.0.0"
+  }
+}
