@@ -386,14 +386,14 @@ addEventListener('DOMContentLoaded', (event) => {
             document.getElementById("user-list").innerHTML += userTemplate;
 
             // Check following status
-            checkFollowingStatus();
+            // checkFollowingStatus();
 
             // Update button from localStorage for following/unfollowing
-            updateButton();
+            // updateButton();
 
-            // Mouse events with a second delay
-            setTimeout(followMouseEvent, 1000);
-            setTimeout(unfollowMouseEvent, 1000);
+            // Mouse events for follow/unfollow
+            // followMouseEvent();
+            // unfollowMouseEvent();
         };
 
       });
@@ -415,9 +415,10 @@ const headerInfo = `
 
 <p>Koska Mastodonin käyttäjiä on alkuun hieman hankala löytää palvelun hajautuksen vuoksi, olen kasannut tähän listan suomalaisista käyttäjistä eri instansseilta, käyttäjien itsensä suostumuksella. Listaa päivitetään säännöllisesti.</p>
 
+<div class="integration-functionality" hidden>
 <h2>Seuraa nappia painamalla</h2>
 
-<p>Jotta voit seurata ihmisiä suoraan listalta, sinun täytyy ensin sallia lupa sovelluksen käyttöön. Tämän jälkeen voit seurata listaa painamalla <b>Seuraa</b>-nappia.</p>
+<p>Jotta voit seurata ihmisiä suoraan listalta, sinun täytyy ensin sallia lupa sovelluksen käyttöön. Tämän jälkeen voit seurata yksittäistä käyttäjää painamalla <b>Seuraa</b>-nappia.</p>
 
   <div class="label_input">
     <label for="auth-instance">Instanssisi URL-osoite</label>
@@ -427,6 +428,7 @@ const headerInfo = `
       <button class="button" id="button-auth">Ladataan...</button>
     </div>
   </div>
+</div>
 `
 
 const instructions = `
@@ -439,16 +441,7 @@ const instructions = `
 
   <h2>Kuinka seurata listan käyttäjiä</h2>
 
-  <p>Olen rakentamassa listalle automatiikkaa niin, että jatkossa voisit seurata käyttäjiä suoraan tältä sivulta. Jos haluat auttaa kehityksessä, <a href="https://github.com/ronilaukkarinen/finnish-mastodon-users/issues/7"></a>katso issue #7</a>. Sitä odotellessa, lue ohjeet alta.</p>
-
-  <h3>Jos haluat seurata käyttäjiä yksitellen</b>, tähän löytyy useampi tapa:</h3>
-
-  <ul>
-    <li>Kopioi seurattavan ihmisen profiilin koko osoite leikepöydälle. Tämän jälkeen laita se Mastodon-instanssisi tai sovelluksesi hakuun (usein <b>Selaa</b> alta). Käyttäjän löytyessä klikkaa <b>Seuraa</b>.</li>
-    <li>Lataa <a href="https://github.com/raikasdev/mastodon4-redirect">Mastodon4 Redirect</a>-selainlaajennos (<a href="https://addons.mozilla.org/en-US/firefox/addon/mastodon4-redirect/">Firefox</a> tai <a href="https://chrome.google.com/webstore/detail/mastodon4-redirect/acbfckpoogjdigldffcbldijhgnjpfnc">Chrome</a>). Laita lisäosan asetuksiin oman instanssisi URL-osoite. Tämän jälkeen klikkaa alta <b>Seuraa</b>, jonka jälkeen sinut ohjataan käyttäjän profiiliin, josta voit klikata <b>Seuraa</b> suoraan onnistuneesti.</li>
-    <li>Lataa <a href="https://github.com/bramus/mastodon-profile-redirect">Mastodon Profile Redirect</a>-selainlaajennos (<a href="https://addons.mozilla.org/en-US/firefox/addon/mastodon-profile-redirect/">Firefox</a> tai <a href="https://chrome.google.com/webstore/detail/mastodon-profile-redirect/limifnkopacddgpihodacjeckfkpbfoe">Chrome</a>). Laita lisäosan asetuksiin oman instanssisi URL-osoite. Klikkaa alta <b>Seuraa</b>, sitten klikkaa selaimen lisäosapalkista lisäosan kuvaketta. Kun selaimesi on ohjannut profiiliin, klikkaa <b>Seuraa</b> normaalisti.</li>
-    <li>Lataa <a href="https://fo.llow.social/roam">Roam Chrome-lisäosa</a> ja laita asetuksiin oman instanssisi osoite. Klikkaa alta <b>Seuraa</b>, sitten klikkaa selaimen lisäosapalkista lisäosan kuvaketta, josta pääset seuraamaan käyttäjää.</li>
-  </ul>
+  <p>Suoraan tältä sivulta ei (vielä) voi seurata käyttäjiä teknisten rajoitteiden takia. Katso kuitenkin ohjeet alta käyttäjien käsin seuraamista varten.</p>
 
   <h3>Jos haluat seurata kaikkia käyttäjiä kerralla</h3>
 
@@ -457,6 +450,19 @@ const instructions = `
   <p>
     <a href="following_accounts.csv" class="button">Lataa CSV</a>
   </p>
+
+  <h3>Jos haluat seurata käyttäjiä yksitellen</b></h3>
+
+  <p>Mastodon ei salli toisen instanssin kautta seuraamista teknisen rajoitteen takia, joten "suora seuraaminen" on hieman hankalaa.</p>
+
+  <p>Olen rakentamassa listalle automatiikkaa niin, että jatkossa voisit seurata käyttäjiä suoraan tältä sivulta painamalla nappia. Jos haluat auttaa kehityksessä, <a href="https://github.com/ronilaukkarinen/finnish-mastodon-users/issues/7">katso issue #7</a>. Sitä odotellessa, lue ohjeet alta. Seuraamiseen on olemassa useampaa eri tapaa:</p>
+
+  <ul>
+    <li>Kopioi seurattavan ihmisen profiilin koko osoite leikepöydälle. Tämän jälkeen laita se Mastodon-instanssisi tai sovelluksesi hakuun (usein <b>Selaa</b> alta). Käyttäjän löytyessä klikkaa <b>Seuraa</b>.</li>
+    <li>Lataa <a href="https://github.com/raikasdev/mastodon4-redirect">Mastodon4 Redirect</a>-selainlaajennos (<a href="https://addons.mozilla.org/en-US/firefox/addon/mastodon4-redirect/">Firefox</a> tai <a href="https://chrome.google.com/webstore/detail/mastodon4-redirect/acbfckpoogjdigldffcbldijhgnjpfnc">Chrome</a>). Laita lisäosan asetuksiin oman instanssisi URL-osoite. Tämän jälkeen klikkaa alta <b>Siirry profiiliin</b>, jonka jälkeen sinut ohjataan käyttäjän profiiliin, josta voit klikata <b>Seuraa</b> suoraan onnistuneesti.</li>
+    <li>Lataa <a href="https://github.com/bramus/mastodon-profile-redirect">Mastodon Profile Redirect</a>-selainlaajennos (<a href="https://addons.mozilla.org/en-US/firefox/addon/mastodon-profile-redirect/">Firefox</a> tai <a href="https://chrome.google.com/webstore/detail/mastodon-profile-redirect/limifnkopacddgpihodacjeckfkpbfoe">Chrome</a>). Laita lisäosan asetuksiin oman instanssisi URL-osoite. Klikkaa alta <b>Seuraa</b>, sitten klikkaa selaimen lisäosapalkista lisäosan kuvaketta. Kun selaimesi on ohjannut profiiliin, klikkaa <b>Seuraa</b> normaalisti.</li>
+    <li>Lataa <a href="https://fo.llow.social/roam">Roam Chrome-lisäosa</a> ja laita asetuksiin oman instanssisi osoite. Klikkaa alta <b>Siirry profiiliin</b>, sitten klikkaa selaimen lisäosapalkista lisäosan kuvaketta, josta pääset seuraamaan käyttäjää.</li>
+  </ul>
 </div>
 `
 
