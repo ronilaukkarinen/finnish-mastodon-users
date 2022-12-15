@@ -188,6 +188,7 @@ div#instructions ol {
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 0;
+  line-height: 1.5;
   overflow: hidden;
   padding: 7px 18px;
   position: relative;
@@ -202,6 +203,17 @@ div#instructions ol {
 .button:hover {
   background-color: var(--color-very-light-blue-highlight);
   text-decoration: none;
+}
+
+.button.button-follow,
+.button.button-unfollow {
+  min-height: 36px;
+  min-width: 88px;
+}
+
+/* stylelint-disable-next-line */
+.button.button-unfollow:hover {
+  background-color: #df405a;
 }
 
 button[aria-controls="instructions"] {
@@ -355,10 +367,6 @@ button[aria-controls="instructions"]:hover {
   color: var(--color-white);
   display: block;
   font-weight: 700;
-}
-
-.display-name__html {
-  font-weight: 500;
 }
 
 /* Forms */

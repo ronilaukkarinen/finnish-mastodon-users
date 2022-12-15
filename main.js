@@ -208,12 +208,15 @@ addEventListener('DOMContentLoaded', (event) => {
               // If we're logged in, add follow button if not already following (check relationship)
               if (localStorage.getItem('finnish_mastodon_users_access_token')) {
 
-                fetch(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/search?access_token=" + localStorage.getItem('finnish_mastodon_users_access_token') + "&q=" + user + "&following=true")
+                fetch(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/search?access_token=" + localStorage.getItem('finnish_mastodon_users_access_token') + "&q=" + user + "&following=true&limit=1")
                   .then(response => response.json())
                   .then(json_relationship => {
 
-                  if (json_relationship[0].id.length > 0) {
-                    // Button markup
+                  console.log(user);
+                  console.log(json_relationship);
+
+                  // Check if we're following the user, if the first search result from following is actually our user
+                  if (json_relationship.length > 0 && json.id === json_relationship[0].id) {
                     followButton = `<button class="button button-unfollow" data-id="${json.id}" data-instance="${instance}" data-acct="${acct}" data-user="${user}">Lopeta seuraaminen</button>`;
                   } else {
                     followButton = `<button class="button button-follow" data-id="${json.id}" data-instance="${instance}" data-acct="${acct}" data-user="${user}">Seuraa</button>`;
@@ -269,7 +272,6 @@ addEventListener('DOMContentLoaded', (event) => {
             function unfollow() {
               // Add event listener to button-unfollow
               const unfollowButtons = document.querySelectorAll('.button-unfollow')
-              console.log(unfollowButtons);
               unfollowButtons.forEach((unfollowButton) => {
                 unfollowButton.addEventListener('click', (event) => {
                   const account = event.target.getAttribute('data-id')
@@ -285,7 +287,13 @@ addEventListener('DOMContentLoaded', (event) => {
                   })
                     .then(response => response.json())
                     .then(data => {
-                      console.log(data)
+
+                    // Remove button-unfollow and add button-follow
+                    event.target.classList.remove('button-unfollow')
+                    event.target.classList.add('button-follow')
+
+                    // Change text to "Follow"
+                    event.target.innerHTML = "Seuraa"
                     })
                 })
               })
@@ -299,7 +307,6 @@ addEventListener('DOMContentLoaded', (event) => {
               followButtons.forEach((followButton) => {
                 followButton.addEventListener('click', (event) => {
                   const account = event.target.getAttribute('data-id')
-                  console.log('Click');
 
                   // Follow account
                   const follow = new URL(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/" + account + "/follow")
@@ -312,7 +319,13 @@ addEventListener('DOMContentLoaded', (event) => {
                   })
                     .then(response => response.json())
                     .then(data => {
-                      console.log(data)
+
+                      // Replace follow button (event target) class
+                      event.target.classList.remove('button-follow');
+                      event.target.classList.add('button-unfollow');
+
+                      // Replace follow button (event target) text
+                      event.target.innerHTML = "Lopeta seuraaminen";
                     })
                 })
               })
