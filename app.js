@@ -54,7 +54,7 @@ $(document).ready(() => {
             }
           } catch (e) {}
           // Append simple user list item to user-list
-          // $("#user-list").append(`<li><a href="https://${instance}/@${acct}" class="status__display-name" aria-label="Seuraa käyttäjää ${user}"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="${json.avatar}" alt="Käyttäjäkuva käyttäjälle ${acct}"></div></div><span class="display-name"><bdi><strong class="display-name__html">${display_name}</strong></bdi> <span class="display-name__account">${user}</span></span></a><a tabindex="-1" aria-hidden="true" href="https://${instance}/@${acct}" class="button">Seuraa</a></li>`);
+          // $("#user-list").append(`<li><a href="https://${instance}/@${acct}" class="status__display-name" aria-label="Seuraa käyttäjää ${user}"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="${json.avatar}" alt="Käyttäjäkuva käyttäjälle ${acct}"></div></div><span class="display-name"><bdi><strong class="display-name__html">${display_name}</strong></bdi> <span class="display-name__account">${user}</span></span></a><a tabindex="-1" aria-hidden="true" href="https://${instance}/@${acct}" class="button">Siirry profiiliin</a></li>`);
 
           // Append explore__suggestions account-card to user-list
           $("#user-list").append(`<li class="account-card">\
@@ -95,7 +95,7 @@ $(document).ready(() => {
                 </div>\
               </div>\
               <div class="account-card__actions__button">\
-                <a href="https://${instance}/@${acct}" class="button">Seuraa</a>\
+                <a href="https://${instance}/@${acct}" class="button">Siirry profiiliin</a>\
               </div>\
             </div>\
           </li>`);
