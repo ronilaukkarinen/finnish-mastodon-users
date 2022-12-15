@@ -11,6 +11,8 @@
   --color-wild-blue-yonder: #9baec8;
   --color-arsenic: #393f4f;
   --color-eerie-black: #17191f;
+  --color-chinese-black: #131419;
+  --color-vampire-black: #0a0b0e;
 }
 
 a {
@@ -112,7 +114,7 @@ div#instructions ol {
   gap: 10px;
   margin-bottom: 27px;
   margin-top: 27px;
-  padding-left: 10px;
+  padding-left: 20px;
 }
 
 /* Mastodon generic */
@@ -186,6 +188,7 @@ div#instructions ol {
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 0;
+  line-height: 1.5;
   overflow: hidden;
   padding: 7px 18px;
   position: relative;
@@ -200,6 +203,17 @@ div#instructions ol {
 .button:hover {
   background-color: var(--color-very-light-blue-highlight);
   text-decoration: none;
+}
+
+.button.button-follow,
+.button.button-unfollow {
+  min-height: 36px;
+  min-width: 88px;
+}
+
+/* stylelint-disable-next-line */
+.button.button-unfollow:hover {
+  background-color: #df405a;
 }
 
 button[aria-controls="instructions"] {
@@ -226,6 +240,11 @@ button[aria-controls="instructions"]:hover {
 /* Account card */
 .account-card {
   background-color: var(--color-arsenic);
+}
+
+a.account-card__permalink:focus,
+a.account-card__permalink:hover {
+  text-decoration: none;
 }
 
 .account-card__header img {
@@ -355,11 +374,67 @@ button[aria-controls="instructions"]:hover {
   font-weight: 700;
 }
 
-.display-name__html {
+/* Forms */
+.label_input > label {
+  color: var(--color-white);
+  display: block;
+  font-family: inherit;
+  font-size: 14px;
   font-weight: 500;
+  margin-bottom: 8px;
+  word-wrap: break-word;
+}
+
+input[type="text"],
+input[type="url"],
+textarea {
+  background-color: var(--color-chinese-black);
+  border: 1px solid var(--color-vampire-black);
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--color-white);
+  display: block;
+  font-family: inherit;
+  font-size: 16px;
+  outline: 0;
+  padding: 10px;
+  resize: vertical;
+  width: 100%;
+}
+
+.label_input__wrapper {
+  display: flex;
+}
+
+.label_input {
+  margin-bottom: 27px;
+  margin-top: 27px;
+}
+
+@media (min-width: 601px) {
+  input[type="url"].auth-input {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    width: 75%;
+  }
+
+  .button#button-auth {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    width: 25%;
+  }
 }
 
 @media (max-width: 600px) {
+  .label_input__wrapper {
+    display: block;
+  }
+
+  .button#button-auth {
+    height: 43px;
+    width: 100%;
+  }
+
   body,
   .display-name,
   .display-name__account,
