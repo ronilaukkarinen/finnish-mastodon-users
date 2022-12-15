@@ -100,52 +100,6 @@ addEventListener('DOMContentLoaded', (event) => {
   // If we have logged in
   if (localStorage.getItem('finnish_mastodon_users_access_token')) {
 
-    // Add event listener to button-unfollow and button-follow
-    // const unfollowButtons = document.querySelectorAll('.button-unfollow')
-    // console.log(unfollowButtons);
-    // unfollowButtons.forEach((unfollowButton) => {
-    //   unfollowButton.addEventListener('click', (event) => {
-    //     const account = event.target.getAttribute('data-id')
-
-    //     // Unfollow account
-    //     const unfollow = new URL(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/" + account + "/unfollow")
-    //     fetch(unfollow, {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': localStorage.getItem('finnish_mastodon_users_token_type') + ' ' + localStorage.getItem('finnish_mastodon_users_access_token')
-    //       }
-    //     })
-    //       .then(response => response.json())
-    //       .then(data => {
-    //         console.log(data)
-    //       })
-    //   })
-    // })
-
-    // // Add event listener to button-follow
-    // const followButtons = document.querySelectorAll('.button-follow')
-    // followButtons.forEach((followButton) => {
-    //   followButton.addEventListener('click', (event) => {
-    //     const account = event.target.getAttribute('data-id')
-    //     console.log('Click');
-
-    //     // Follow account
-    //     const follow = new URL(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/" + account + "/follow")
-    //     fetch(follow, {
-    //       method: 'POST',
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         'Authorization': localStorage.getItem('finnish_mastodon_users_token_type') + ' ' + localStorage.getItem('finnish_mastodon_users_access_token')
-    //       }
-    //     })
-    //       .then(response => response.json())
-    //       .then(data => {
-    //         console.log(data)
-    //       })
-    //   })
-    // })
-
     // Change login button to logout button
     authButton.innerText = 'Kirjaudu ulos'
 
@@ -311,8 +265,63 @@ addEventListener('DOMContentLoaded', (event) => {
             </li>
             `
 
+            // Add event listener to button-unfollow and button-follow
+            function unfollow() {
+              // Add event listener to button-unfollow
+              const unfollowButtons = document.querySelectorAll('.button-unfollow')
+              console.log(unfollowButtons);
+              unfollowButtons.forEach((unfollowButton) => {
+                unfollowButton.addEventListener('click', (event) => {
+                  const account = event.target.getAttribute('data-id')
+
+                  // Unfollow account
+                  const unfollow = new URL(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/" + account + "/unfollow")
+                  fetch(unfollow, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': localStorage.getItem('finnish_mastodon_users_token_type') + ' ' + localStorage.getItem('finnish_mastodon_users_access_token')
+                    }
+                  })
+                    .then(response => response.json())
+                    .then(data => {
+                      console.log(data)
+                    })
+                })
+              })
+            }
+
+            // Add event listener to button-follow
+            function follow() {
+
+              // Add event listener to button-follow
+              const followButtons = document.querySelectorAll('.button-follow')
+              followButtons.forEach((followButton) => {
+                followButton.addEventListener('click', (event) => {
+                  const account = event.target.getAttribute('data-id')
+                  console.log('Click');
+
+                  // Follow account
+                  const follow = new URL(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/" + account + "/follow")
+                  fetch(follow, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': localStorage.getItem('finnish_mastodon_users_token_type') + ' ' + localStorage.getItem('finnish_mastodon_users_access_token')
+                    }
+                  })
+                    .then(response => response.json())
+                    .then(data => {
+                      console.log(data)
+                    })
+                })
+              })
+            }
+
             // Append userTemplate to user-list
             document.getElementById("user-list").innerHTML += userTemplate;
+            follow();
+            unfollow();
             });
 
           }
