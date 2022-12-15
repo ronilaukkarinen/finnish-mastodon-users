@@ -194,33 +194,48 @@ addEventListener('DOMContentLoaded', (event) => {
               bio = twemoji.parse(bio, {className: "emojione"});
 
               // Init follow button
-              let followButton = `<a href="https://${instance}/@${user}" class="button">Siirry profiiliin</a>`;
+              let followButton = `<a href="https://${instance}/@${user}" id="button-${json.id}" class="button button-action">Siirry profiiliin</a>`;
 
-            try {
-              if (json.emojis.length > 0) {
-                json.emojis.forEach(dp_emoji => {
-                  display_name = display_name.replaceAll(`:${dp_emoji.shortcode}:`, `<img src="${dp_emoji.url}" alt="Emoji ${dp_emoji.shortcode}" class="emojione">`);
+              try {
+                if (json.emojis.length > 0) {
+                  json.emojis.forEach(dp_emoji => {
+                    display_name = display_name.replaceAll(`:${dp_emoji.shortcode}:`, `<img src="${dp_emoji.url}" alt="Emoji ${dp_emoji.shortcode}" class="emojione">`);
                     bio = bio.replaceAll(`:${dp_emoji.shortcode}:`, `<img src="${dp_emoji.url}" alt="Emoji ${dp_emoji.shortcode}" class="emojione">`);
                   });
                 }
               } catch (e) {}
 
+              // Update follow button with json.id ID for follow button
+              function updateButton() {
+                document.getElementById('actions__button-' + json.id).innerHTML = localStorage.getItem('finnish_mastodon_user_follow_button_' + json.id);
+              }
+
               // If we're logged in, add follow button if not already following (check relationship)
               if (localStorage.getItem('finnish_mastodon_users_access_token')) {
 
+              // Check if we're following the user
+              function checkFollowingStatus() {
                 fetch(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/search?access_token=" + localStorage.getItem('finnish_mastodon_users_access_token') + "&q=" + user + "&following=true&limit=1")
-                  .then(response => response.json())
-                  .then(json_relationship => {
+                .then(response => response.json())
+                .then(json_relationship => {
 
-                  console.log(user);
-                  console.log(json_relationship);
+                  const unFollowButtonData = `<button id="unfollow-button-${json.id}" class="button button-action button-unfollow" data-id="${json.id}" data-instance="${instance}" data-acct="${acct}" data-user="${user}">Lopeta seuraaminen</button>`;
+
+                  const followButtonData = `<button id="follow-button-${json.id}" class="button button-action button-follow" data-id="${json.id}" data-instance="${instance}" data-acct="${acct}" data-user="${user}">Seuraa</button>`;
 
                   // Check if we're following the user, if the first search result from following is actually our user
                   if (json_relationship.length > 0 && json.id === json_relationship[0].id) {
-                    followButton = `<button class="button button-unfollow" data-id="${json.id}" data-instance="${instance}" data-acct="${acct}" data-user="${user}">Lopeta seuraaminen</button>`;
+                    // Update button to localStorage
+                    // console.log('Seuraat käyttäjää ' + user);
+                    localStorage.setItem('finnish_mastodon_user_follow_button_' + json.id, unFollowButtonData);
+
                   } else {
-                    followButton = `<button class="button button-follow" data-id="${json.id}" data-instance="${instance}" data-acct="${acct}" data-user="${user}">Seuraa</button>`;
+                    // Update button to localStorage
+                    // console.log('Et seuraa käyttäjää ' + user);
+                    localStorage.setItem('finnish_mastodon_user_follow_button_' + json.id, followButtonData);
                   }
+                });
+              }
 
               // Template for user-list to use in innerHTML
               let userTemplate = `
@@ -261,92 +276,134 @@ addEventListener('DOMContentLoaded', (event) => {
                     <small><span>Seurataan</span></small>\
                   </div>\
                 </div>\
-                <div class="account-card__actions__button">\
+                <div class="account-card__actions__button" id="actions__button-${json.id}">\
                   ${followButton}\
                 </div>\
               </div>\
             </li>
             `
 
-            // Add event listener to button-unfollow and button-follow
-            function unfollow() {
-              // Add event listener to button-unfollow
-              const unfollowButtons = document.querySelectorAll('.button-unfollow')
-              unfollowButtons.forEach((unfollowButton) => {
-                unfollowButton.addEventListener('click', (event) => {
-                  const account = event.target.getAttribute('data-id')
+            // Unfollow action
+            function unfollow(event) {
+              const account = event.target.getAttribute('data-id')
 
-                  // Unfollow account
-                  const unfollow = new URL(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/" + account + "/unfollow")
-                  fetch(unfollow, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': localStorage.getItem('finnish_mastodon_users_token_type') + ' ' + localStorage.getItem('finnish_mastodon_users_access_token')
-                    }
-                  })
-                    .then(response => response.json())
-                    .then(data => {
+              // console.log('Klikattu unfollow käyttäjälle ' + account);
 
-                    // Remove button-unfollow and add button-follow
-                    event.target.classList.remove('button-unfollow')
-                    event.target.classList.add('button-follow')
+              // Check if we're following the user
+              checkFollowingStatus();
 
-                    // Change text to "Follow"
-                    event.target.innerHTML = "Seuraa"
-                    })
-                })
+              // Unfollow account
+              const unfollow = new URL(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/" + account + "/unfollow")
+              fetch(unfollow, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': localStorage.getItem('finnish_mastodon_users_token_type') + ' ' + localStorage.getItem('finnish_mastodon_users_access_token')
+                }
               })
+                .then(response => response.json())
+                .then(data => {
+
+                  // Remove button-unfollow and add button-follow
+                  event.target.classList.remove('button-unfollow')
+                  event.target.classList.add('button-follow')
+
+                  // Change text to "Follow"
+                  event.target.innerHTML = "Seuraa"
+
+                  // Add button id to follow button with account id
+                  event.target.setAttribute('id', 'follow-button-' + account)
+
+                  // Update button
+                  localStorage.setItem('finnish_mastodon_user_follow_button_' + account, event.target.outerHTML);
+                })
             }
 
-            // Add event listener to button-follow
-            function follow() {
+            // Follow action
+            function follow(event) {
 
-              // Add event listener to button-follow
-              const followButtons = document.querySelectorAll('.button-follow')
-              followButtons.forEach((followButton) => {
-                followButton.addEventListener('click', (event) => {
-                  const account = event.target.getAttribute('data-id')
+              const account = event.target.getAttribute('data-id')
 
-                  // Follow account
-                  const follow = new URL(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/" + account + "/follow")
-                  fetch(follow, {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': localStorage.getItem('finnish_mastodon_users_token_type') + ' ' + localStorage.getItem('finnish_mastodon_users_access_token')
-                    }
-                  })
-                    .then(response => response.json())
-                    .then(data => {
+              // console.log('Klikattu follow käyttäjälle ' + account);
 
-                      // Replace follow button (event target) class
-                      event.target.classList.remove('button-follow');
-                      event.target.classList.add('button-unfollow');
+              // Check if we're following the user
+              checkFollowingStatus();
 
-                      // Replace follow button (event target) text
-                      event.target.innerHTML = "Lopeta seuraaminen";
-                    })
-                })
+              // Follow account
+              const follow = new URL(localStorage.getItem('finnish_mastodon_user_authed_instance') + "/api/v1/accounts/" + account + "/follow")
+              fetch(follow, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': localStorage.getItem('finnish_mastodon_users_token_type') + ' ' + localStorage.getItem('finnish_mastodon_users_access_token')
+                }
               })
+                .then(response => response.json())
+                .then(data => {
+
+                  // Replace follow button (event target) class
+                  event.target.classList.remove('button-follow');
+                  event.target.classList.add('button-unfollow');
+
+                  // Replace follow button (event target) text
+                  event.target.innerHTML = "Lopeta seuraaminen";
+
+                  // Add button id to unfollow button with account id
+                  event.target.setAttribute('id', 'unfollow-button-' + account);
+
+                  // Update button
+                  localStorage.setItem('finnish_mastodon_user_follow_button_' + account, event.target.outerHTML);
+                })
+            }
+
+              // Add event listener to follow-button
+              function followMouseEvent() {
+                const followButtonId = document.getElementById('follow-button-' + json.id);
+                if ( typeof followButtonId !== 'undefined' && followButtonId !== null ) {
+
+                    // Follow with a click of a button
+                    followButtonId.addEventListener('click', function(event) {
+                      follow(event);
+                    }
+                  );
+                }
+              }
+
+            // Add event listener to unfollow-button
+            function unfollowMouseEvent() {
+              const unfollowButtonId = document.getElementById('unfollow-button-' + json.id);
+              if ( typeof unfollowButtonId !== 'undefined' && unfollowButtonId !== null ) {
+
+                  // Unfollow with a click of a button
+                  unfollowButtonId.addEventListener('click', function(event) {
+                    unfollow(event);
+                  }
+                );
+              }
             }
 
             // Append userTemplate to user-list
             document.getElementById("user-list").innerHTML += userTemplate;
-            follow();
-            unfollow();
-            });
 
-          }
+            // Check following status
+            checkFollowingStatus();
 
-          });
+            // Update button from localStorage for following/unfollowing
+            updateButton();
 
-          counter++;
-          document.getElementById("user-count").innerHTML = counter;
-        }
+            // Mouse events with a second delay
+            setTimeout(followMouseEvent, 1000);
+            setTimeout(unfollowMouseEvent, 1000);
+        };
+
       });
+
+      counter++;
+      document.getElementById("user-count").innerHTML = counter;
     }
-  );
+  });
+}
+);
 
 });
 

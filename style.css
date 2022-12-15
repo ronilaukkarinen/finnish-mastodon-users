@@ -242,6 +242,11 @@ button[aria-controls="instructions"]:hover {
   background-color: var(--color-arsenic);
 }
 
+a.account-card__permalink:focus,
+a.account-card__permalink:hover {
+  text-decoration: none;
+}
+
 .account-card__header img {
   background-color: var(--color-eerie-black);
   display: block;
