@@ -1,18 +1,25 @@
-// User list
-$(document).ready(() => {
+// When DOM is ready
+addEventListener('DOMContentLoaded', () => {
+
   // Update aria-busy for user-count
-  $("#user-count").attr("aria-busy", "true");
+  const userCount = document.getElementById('user-count');
+  userCount.setAttribute('aria-busy', 'true');
 
   // Update aria-busy for user-list
-  $("#user-list").attr("aria-busy", "true");
+  const userList = document.getElementById('user-list');
+  userList.setAttribute('aria-busy', 'true');
 
   // Parse CSV and add users
-  $.get("following_accounts.csv", (result) => {
+  fetch("following_accounts.csv")
+  .then(response => response.text())
+  .then(result => {
     let csv = result;
     let lines = csv.split("\n");
+
     lines.shift();
-    $("#user-list").html("");
-    let counter = -1;
+    document.getElementById("user-list").innerHTML = "";
+
+    let counter = 0;
     lines.forEach((line) => {
       if (line !== "") {
         let parts = line.split(",");
@@ -31,6 +38,7 @@ $(document).ready(() => {
 
         // Check if instance is in array
         if (instanceExceptions.includes(instance)) {
+
           // If instance is in array, change user to acct
           user = acct;
 
@@ -40,24 +48,30 @@ $(document).ready(() => {
           }
         }
 
-        $.getJSON("https://"+instance+"/api/v1/accounts/lookup?acct="+user, (json) => {
+        fetch("https://"+instance+"/api/v1/accounts/lookup?acct="+user)
+        .then(response => response.json())
+        .then(json => {
           let display_name = json.display_name;
           let bio = json.note;
-          display_name = twemoji.parse(display_name, {className: "emojione"});
-          bio = twemoji.parse(bio, {className: "emojione"});
-          try {
-            if (json.emojis.length > 0) {
-              json.emojis.forEach(dp_emoji => {
-                display_name = display_name.replaceAll(`:${dp_emoji.shortcode}:`, `<img src="${dp_emoji.url}" alt="Emoji ${dp_emoji.shortcode}" class="emojione">`);
-                bio = bio.replaceAll(`:${dp_emoji.shortcode}:`, `<img src="${dp_emoji.url}" alt="Emoji ${dp_emoji.shortcode}" class="emojione">`);
-              });
-            }
-          } catch (e) {}
-          // Append simple user list item to user-list
-          // $("#user-list").append(`<li><a href="https://${instance}/@${acct}" class="status__display-name" aria-label="Seuraa käyttäjää ${user}"><div class="status__avatar"><div class="account__avatar" style="width: 46px; height: 46px;"><img src="${json.avatar}" alt="Käyttäjäkuva käyttäjälle ${acct}"></div></div><span class="display-name"><bdi><strong class="display-name__html">${display_name}</strong></bdi> <span class="display-name__account">${user}</span></span></a><a tabindex="-1" aria-hidden="true" href="https://${instance}/@${acct}" class="button">Profiili</a></li>`);
+              display_name = twemoji.parse(display_name, {className: "emojione"});
+              bio = twemoji.parse(bio, {className: "emojione"});
 
-          // Append explore__suggestions account-card to user-list
-          $("#user-list").append(`<li class="account-card">\
+            // Init follow/profile button
+            let followButton = `<a href="https://${instance}/@${user}" id="button-${json.id}" class="button button-action">Profiili</a>`;
+
+            try {
+              if (json.emojis.length > 0) {
+
+                json.emojis.forEach(dp_emoji => {
+                  display_name = display_name.replaceAll(`:${dp_emoji.shortcode}:`, `<img src="${dp_emoji.url}" alt="Emoji ${dp_emoji.shortcode}" class="emojione">`);
+                    bio = bio.replaceAll(`:${dp_emoji.shortcode}:`, `<img src="${dp_emoji.url}" alt="Emoji ${dp_emoji.shortcode}" class="emojione">`);
+                  });
+                }
+            } catch (e) {}
+
+            // User template
+            let userTemplate = `
+            <li class="account-card">\
             <a class="account-card__permalink" href="https://${instance}/@${acct}" class="status__display-name" aria-label="Seuraa käyttäjää ${user}">\
               <div class="account-card__header" aria-hidden="true">\
                 <img src="${json.header}" alt="Käyttäjän ${acct} header-kuva">\
@@ -94,42 +108,33 @@ $(document).ready(() => {
                   <small><span>Seurataan</span></small>\
                 </div>\
               </div>\
-              <div class="account-card__actions__button">\
-                <a href="https://${instance}/@${acct}" class="button">Profiili</a>\
+              <div class="account-card__actions__button" id="actions__button-${json.id}">\
+                ${followButton}\
               </div>\
             </div>\
-          </li>`);
-        });
-        counter++;
+            <li>`;
 
-        // Update aria-busy for user-list
-        $("#user-list").attr("aria-busy", "false");
+            // Count users
+            counter++;
 
-        $("#user-count").html(counter);
+            // Append userTemplate to user-list
+            document.getElementById("user-list").innerHTML += userTemplate;
 
-        // Update aria-busy for user-count
-        $("#user-count").attr("aria-busy", "false");
+            // Update user-count
+            document.getElementById("user-count").innerHTML = counter;
+
+            // Update aria-busy for user-count
+            userCount.setAttribute('aria-busy', 'false');
+
+            // Update aria-busy for user-list
+            userList.setAttribute('aria-busy', 'false');
+
+          })
+          .catch(error => {
+            console.log(error);
+          }
+        );
       }
     });
   });
-
-  // Last updated
-  moment.locale('fi');
-
-  // Get last modified time from the csv file with $.ajax
-  const lastUpdated = $.ajax({
-    url: 'following_accounts.csv',
-    type: 'HEAD',
-    async: false
-  }).getResponseHeader('Last-Modified');
-
-  const lastUpdatedDate = moment(lastUpdated);
-  const lastUpdatedElement = document.getElementById('updated');
-
-  // Add last updated in textual format to element title attribute
-  lastUpdatedElement.setAttribute('title', lastUpdatedDate.format('LLLL'));
-
-  // Last updated from now
-  const lastUpdatedFromNow = lastUpdatedDate.fromNow();
-  lastUpdatedElement.innerHTML = lastUpdatedFromNow;
 });

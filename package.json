@@ -19,6 +19,8 @@
   "devDependencies": {
     "@ronilaukkarinen/stylelint-a11y": "^1.2.4",
     "stylelint": "^14.16.0",
-    "stylelint-order": "^5.0.0"
+    "stylelint-order": "^5.0.0",
+    "moment": "^2.29.4",
+    "twemoji": "^14.0.2"
   }
 }
