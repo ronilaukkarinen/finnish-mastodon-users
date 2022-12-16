@@ -275,6 +275,10 @@ a.account-card__permalink:hover {
   word-wrap: break-word;
 }
 
+.account-card__bio a {
+  color: var(--color-white);
+}
+
 .account-card__bio p:first-child {
   margin-top: 0;
 }
