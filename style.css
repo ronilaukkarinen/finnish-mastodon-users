@@ -143,6 +143,7 @@ div#instructions ol {
 }
 
 .display-name__html {
+  font-size: 16px;
   font-weight: 500;
 }
 
@@ -264,7 +265,7 @@ a.account-card__permalink:hover {
 }
 
 .account-card__bio {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 21px;
   margin: 8px 0;
   /* max-height: 42px; */
@@ -277,6 +278,12 @@ a.account-card__permalink:hover {
 
 .account-card__bio a {
   color: var(--color-white);
+  text-decoration: underline;
+}
+
+.account-card__bio a:focus,
+.account-card__bio a:hover {
+  text-decoration: none;
 }
 
 .account-card__bio p:first-child {
