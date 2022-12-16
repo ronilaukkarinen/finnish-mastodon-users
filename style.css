@@ -189,7 +189,7 @@ div#instructions ol {
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 0;
-  line-height: 1.5;
+  line-height: 22px;
   overflow: hidden;
   padding: 7px 18px;
   position: relative;
@@ -198,6 +198,11 @@ div#instructions ol {
   text-overflow: ellipsis;
   white-space: nowrap;
   width: auto;
+}
+
+.button.button-action {
+  position: relative;
+  z-index: 5;
 }
 
 .button:focus,
@@ -238,9 +243,113 @@ button[aria-controls="instructions"]:hover {
   text-decoration: underline;
 }
 
+/* Screen reader only */
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
 /* Account card */
-.account-card {
+.user-list .account-card {
   background-color: var(--color-arsenic);
+  position: relative;
+}
+
+/* Account card collapsed */
+.user-list .collapsed.account-card {
+  background-color: transparent;
+}
+
+.user-list .collapsed .account-card__actions__button {
+  padding: 0;
+}
+
+.button-collapse {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  height: 100%;
+  position: absolute;
+  width: 80%;
+  z-index: 8;
+}
+
+/* Add transitions to all comma separated */
+.user-list .account-card,
+.user-list .collapsed.account-card,
+.user-list .account-card__title,
+.user-list .collapsed .account-card__title,
+.user-list .account-card__title__avatar,
+.user-list .collapsed .account-card__title__avatar,
+.user-list .account__avatar,
+.user-list .collapsed .account__avatar,
+.user-list .account-card__bio,
+.user-list .collapsed .account-card__bio,
+.user-list .account-card__counters,
+.user-list .collapsed .account-card__counters,
+.user-list .account-card__header img,
+.user-list .collapsed .account-card__header img,
+.user-list .account-card__header,
+.user-list .collapsed .account-card__header {
+  transition: height, padding, opacity, padding .2s cubic-bezier(.4, 0, .2, 1);
+}
+
+@media (max-width: 470px) {
+  .user-list .collapsed .account-card__title .display-name {
+    max-width: 45vw;
+  }
+}
+
+.user-list .collapsed .account-card__title {
+  margin: 0;
+}
+
+.user-list .collapsed .account-card__title__avatar {
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-top: 0;
+}
+
+.user-list .collapsed .account__avatar {
+  /* stylelint-disable-next-line */
+  height: 46px !important;
+  /* stylelint-disable-next-line */
+  width: 46px !important;
+}
+
+.user-list .collapsed .account-card__bio,
+.user-list .collapsed .account-card__counters,
+.user-list .collapsed .account-card__header img,
+.user-list .collapsed .account-card__header {
+  height: 0;
+  margin: 0;
+  opacity: 0;
+  padding: 0;
+}
+
+.user-list .collapsed .account-card__actions {
+  height: auto;
+  margin-top: -44px;
+  opacity: 1;
+}
+
+.user-list .collapsed .account-card__title .display-name {
+  line-height: 22px;
+  margin-bottom: 0;
+  padding: 0;
+}
+
+/* End account card collapsed */
+a.account-card__permalink {
+  max-width: 80%;
+  position: relative;
+  z-index: 4;
 }
 
 a.account-card__permalink:focus,

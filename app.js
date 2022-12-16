@@ -56,8 +56,8 @@ addEventListener('DOMContentLoaded', () => {
               display_name = twemoji.parse(display_name, {className: "emojione"});
               bio = twemoji.parse(bio, {className: "emojione"});
 
-            // Init follow/profile button
-            let followButton = `<a href="https://${instance}/@${user}" id="button-${json.id}" class="button button-action">Profiili</a>`;
+            // Follow link/button
+            let followButton = `<a href="https://${instance}/@${user}" class="button button-action">Profiili</a>`;
 
             try {
               if (json.emojis.length > 0) {
@@ -71,8 +71,10 @@ addEventListener('DOMContentLoaded', () => {
 
             // User template
             let userTemplate = `
-            <li class="account-card">\
-            <a class="account-card__permalink" href="https://${instance}/@${acct}" class="status__display-name" aria-label="Seuraa käyttäjää ${user}">\
+            <li class="account-card collapsed" id="user-${json.id}">\
+            <button id="button-${json.id}" class="button-collapse account-card__permalink" aria-label="Näytä käyttäjän ${acct} lisätiedot" aria-expanded="false" aria-controls="user-${json.id}">\
+              <span class="screen-reader-text">Näytä lisätiedot</span>\
+            </button>\
               <div class="account-card__header" aria-hidden="true">\
                 <img src="${json.header}" alt="Käyttäjän ${acct} header-kuva">\
               </div>\
@@ -112,7 +114,7 @@ addEventListener('DOMContentLoaded', () => {
                 ${followButton}\
               </div>\
             </div>\
-            <li>`;
+            </li>`;
 
             // Count users
             counter++;
@@ -137,4 +139,29 @@ addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // Expand/Collapse single account-card based on user id
+  function expandCollapseUser(id) {
+    let user = document.getElementById("user-"+id);
+    let button = document.getElementById("button-"+id);
+
+    if (user.classList.contains("collapsed")) {
+      user.classList.remove("collapsed");
+      button.getElementsByTagName("span")[0].innerHTML = "Piilota lisätiedot";
+      button.setAttribute("aria-expanded", "false");
+    } else {
+      user.classList.add("collapsed");
+      button.getElementsByTagName("span")[0].innerHTML = "Näytä lisätiedot";
+      button.setAttribute("aria-expanded", "true");
+    }
+  }
+
+  // Run expandCollapseUser() on click
+  document.addEventListener("click", function(e) {
+    if (e.target && e.target.id.includes("button-")) {
+      let id = e.target.id.split("button-")[1];
+      expandCollapseUser(id);
+    }
+  });
+
 });
