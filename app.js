@@ -52,13 +52,18 @@ document.addEventListener('DOMContentLoaded', (event) => {
             }
           }
 
-          fetch("https://" + instance + "/api/v1/accounts/lookup?acct="+user, { cache: "force-cache" })
+          fetch("https://" + instance + "/api/v1/accounts/lookup?acct=" + user, { cache: "force-cache" })
           .then(response => response.json())
           .then(json => {
             let display_name = json.display_name;
             let bio = json.note;
                 display_name = twemoji.parse(display_name, {className: "emojione"});
                 bio = twemoji.parse(bio, {className: "emojione"});
+
+                // If display name is empty, use username
+                if (display_name === "") {
+                  display_name = acct;
+                }
 
               // Follow link/button
               let followButton = `<a href="https://${instance}/@${user}" class="button button-action">Profiili</a>`;
