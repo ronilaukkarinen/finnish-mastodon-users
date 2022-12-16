@@ -1,4 +1,4 @@
-# Finnish Mastodon users
+# 🇫🇮 Finnish Mastodon users
 
 This is a source code of the list for Finnish Mastodon users. The visual HTML list populates automatically from the CSV data with a help of Mastodon REST API.
 
