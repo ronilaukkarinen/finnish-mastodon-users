@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     <bdi>\
                       <strong class="display-name__html">${display_name}</strong>\
                     </bdi>\
-                    <span class="display-name__account">${user}</span>\
+                    <span class="display-name__account">@${user}</span>\
                   </span>\
                 </div>\
               </a>\
