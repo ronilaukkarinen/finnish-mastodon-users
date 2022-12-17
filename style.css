@@ -694,6 +694,27 @@ textarea {
   }
 }
 
+.disabled {
+  pointer-events: none;
+  position: relative;
+}
+
+.disabled > * {
+  opacity: .2;
+}
+
+.disabled::after {
+  content: 'Toimintoa parannellaan parhaillaan...';
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+}
+
 @media (max-width: 477px) {
   /* .user-list .collapsed .account-card__title .display-name {
     max-width: 45vw;
