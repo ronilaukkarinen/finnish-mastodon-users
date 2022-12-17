@@ -144,13 +144,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get authed_user_instance from local storage
                 authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
 
-                fetch(`${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
-                .then(response => response.json())
-                .then(json_me => {
+                // Only one iteration
+                if (counter === 0) {
+                  fetch(`${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
+                  .then(response => response.json())
+                  .then(json_me => {
+
                   // Save authed user's ID to local storage
                   authed_user_id = json_me.id;
                   localStorage.setItem('finnish_mastodon_users_authed_user_id', authed_user_id);
-                });
+                  });
+                }
 
                 // Get authed user id from local storage
                 authed_user_id = localStorage.getItem('finnish_mastodon_users_authed_user_id');
@@ -160,12 +164,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(response => response.json())
                 .then(json_search => {
 
-                  // Get buttons inside elements that do NOT have following class
-                  const buttons_for_not_following = document.querySelectorAll(`#user-${json.id}:not(.following) button`);
+                  // If request is not rate limited
+                  if (json_search.error !== "Too many requests") {
 
-                  // Remove has-no-action class from all buttons from users we're not following
-                  for (let i = 0; i < buttons_for_not_following.length; i++) {
-                    buttons_for_not_following[i].classList.remove('has-no-action');
+                    // Get buttons inside elements that do NOT have following class
+                    const buttons_for_not_following = document.querySelectorAll(`#user-${json.id}:not(.following) button`);
+
+                    // Remove has-no-action class from all buttons from users we're not following
+                    for (let i = 0; i < buttons_for_not_following.length; i++) {
+                      buttons_for_not_following[i].classList.remove('has-no-action');
+                    }
                   }
 
                   // If user with correct ID is found, we follow the user
