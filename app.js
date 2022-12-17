@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Fetch and store authed user's ID to a variable
                 let authed_user_id = "";
-                fetch(`https://${instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
+                fetch(`https://${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
                 .then(response => response.json())
                 .then(json_me => {
                   // Save authed user's ID to local storage
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 authed_user_id = localStorage.getItem('finnish_mastodon_users_authed_user_id');
 
                 // Check if we follow the user by using the search endpoint
-                fetch(`https://${instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`, { cache: "no-cache" })
+                fetch(`https://${authed_user_instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`, { cache: "no-cache" })
                 .then(response => response.json())
                 .then(json_search => {
 
@@ -171,7 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Unfollow with a click of a button
                     document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
 
-                      fetch(`https://${instance}/api/v1/accounts/${json.id}/unfollow?access_token=${access_token}`, { method: 'POST' })
+                      fetch(`https://${authed_user_instance}/api/v1/accounts/${json.id}/unfollow?access_token=${access_token}`, { method: 'POST' })
                       .then(response => response.json())
                       .then(json => {
                         // Remove following class from account-card
@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
               // Default follow action
               document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
-                fetch(`https://${instance}/api/v1/accounts/${json.id}/follow?access_token=${access_token}`, { method: 'POST' })
+                fetch(`https://${authed_user_instance}/api/v1/accounts/${json.id}/follow?access_token=${access_token}`, { method: 'POST' })
                 .then(response => response.json())
                 .then(json => {
 
