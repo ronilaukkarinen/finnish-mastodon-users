@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   if (following_each_other) {
 
                     // Add button to button with id button-action-<user_id>
-                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/web/follow_requests/${json.id}" class="button button-action">Lopeta seuraaminen</a>`;
+                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/@${user}" class="button button-action">Lopeta seuraaminen</a>`;
 
                     // Add following class to account-card
                     document.getElementById(`user-${json.id}`).classList.add('following');
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   if (!following_each_other) {
 
                     // Add button to button with id button-action-<user_id>
-                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/web/follow_requests/${json.id}" class="button button-action">Seuraa</a>`;
+                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/@${user}" class="button button-action">Seuraa</a>`;
 
                     // Add unfollowing class to account-card
                     document.getElementById(`user-${json.id}`).classList.add('unfollowing');
