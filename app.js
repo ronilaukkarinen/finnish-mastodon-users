@@ -87,9 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
               // If we have access_token, let's do magic
               if (access_token) {
 
+                // Get authed_user_instance from local storage
+                authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
+
                 // Add follow button by default
                 // Add button to button with id button-action-<user_id>
-                followButton = `<button class="button button-action">Seuraa</button>`;
+                followButton = `<button class="button button-action has-no-action" data-url="${authed_user_instance}/@${acct}@${user_instance}">Seuraa</button>`;
 
                 // Make it possible to filter out followed users with a checkbox
                 // Only one iteration
@@ -185,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         document.getElementById(`user-${json.id}`).classList.remove('following');
 
                         // Remove button from button with id button-action-<user_id>
-                        document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action">Seuraa</button>`;
+                        document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action has-action">Seuraa</button>`;
 
                         // Calculate the amount of users we're following
                         const followingCount = document.getElementsByClassName('following').length;
@@ -268,7 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>\
               </li>`;
 
-              // Count users
               counter++;
 
               // Determine when counter is 100, this is why we decide the list as loaded up long enough
@@ -310,10 +312,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(json => {
 
                  // Add following class to account-card
-                 document.getElementById(`user-${json.id}`).classList.add('following');
+                 // document.getElementById(`user-${json.id}`).classList.add('following');
+                 document.getElementById(`actions__button-${json.id}`).parentNode.parentNode.parentNode.classList.add('following');
 
                  // Remove unfollowing class from account-card
-                 document.getElementById(`user-${json.id}`).classList.remove('unfollowing');
+                //  document.getElementById(`user-${json.id}`).classList.remove('unfollowing');
+                 document.getElementById(`actions__button-${json.id}`).parentNode.parentNode.parentNode.classList.remove('following');
 
                  // Calculate the amount of users we're following
                  const followingCount = document.getElementsByClassName('following').length;
@@ -322,7 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
 
                  // Add button to button with id button-action-<user_id>
-                 document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/@${user}" class="button button-action">Lopeta seuraaminen</a>`;
+                 document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action">Lopeta seuraaminen</button>`;
                });
               });
 
@@ -372,6 +376,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target && e.target.id.includes("button-")) {
       let id = e.target.id.split("button-")[1];
       expandCollapseUser(id);
+    }
+  });
+
+  // If button has has-no-action class, get its URL and move to it
+  document.addEventListener("click", function(e) {
+    if (e.target && e.target.classList.contains("has-no-action")) {
+      let url = e.target.getAttribute("data-url");
+
+      // Open to new window
+      window.open(url, '_blank');
     }
   });
 });

@@ -109,6 +109,21 @@ addEventListener('DOMContentLoaded', () => {
     // Remove finnish_mastodon_users_instance
     document.cookie = "finnish_mastodon_users_instance=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
+    // Remove access token from local storage
+    localStorage.removeItem('finnish_mastodon_users_access_token');
+
+    // Remove finnish_mastodon_users_count from local storage
+    localStorage.removeItem('finnish_mastodon_users_count');
+
+    // Remove finnish_mastodon_users_count from local storage
+    localStorage.removeItem('finnish_mastodon_users_count');
+
+    // Remove instance name from local storage
+    localStorage.removeItem('finnish_mastodon_users_authed_user_id');
+
+    // Remove instance name from local storage
+    localStorage.removeItem('finnish_mastodon_user_authed_instance');
+
     // Clear logout from URL
     window.history.replaceState({}, document.title, "/" + window.location.pathname.split("/")[1] + "/");
   } else {
