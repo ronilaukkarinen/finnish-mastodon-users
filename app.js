@@ -91,9 +91,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Add button to button with id button-action-<user_id>
                 followButton = `<button class="button button-action">Seuraa</button>`;
 
-                // Get authed_user_instance from local storage
-                authed_user_instance = localStorage.getItem('finnish_mastodon_users_authed_user_instance');
-
                 // Make it possible to filter out followed users with a checkbox
                 // Only one iteration
                 if (counter === 0) {
@@ -140,6 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Fetch and store authed user's ID to a variable
                 let authed_user_id = "";
+
+                // Get authed_user_instance from local storage
+                authed_user_instance = localStorage.getItem('finnish_mastodon_users_authed_user_instance');
+
                 fetch(`https://${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
                 .then(response => response.json())
                 .then(json_me => {
@@ -173,6 +174,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Unfollow with a click of a button
                     document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
+
+                      // Get authed_user_instance from local storage
+                      authed_user_instance = localStorage.getItem('finnish_mastodon_users_authed_user_instance');
 
                       fetch(`https://${authed_user_instance}/api/v1/accounts/${json.id}/unfollow?access_token=${access_token}`, { method: 'POST' })
                       .then(response => response.json())
@@ -297,6 +301,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
               // Default follow action
               document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
+
+                // Get authed_user_instance from local storage
+                authed_user_instance = localStorage.getItem('finnish_mastodon_users_authed_user_instance');
+
                 fetch(`https://${authed_user_instance}/api/v1/accounts/${json.id}/follow?access_token=${access_token}`, { method: 'POST' })
                 .then(response => response.json())
                 .then(json => {
