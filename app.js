@@ -60,27 +60,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 display_name = acct;
               }
 
-              // If response 429
-              if (json.error === "Rate limit exceeded") {
-                // Update aria-busy for user-count
-                const userCount = document.getElementById('user-count');
-                userCount.setAttribute('aria-busy', 'false');
-
-                // Update aria-busy for user-list
-                const userList = document.getElementById('user-list');
-                userList.setAttribute('aria-busy', 'false');
-
-                // Append rate limit message inside user count element, use .append() instead of .innerHTML
-                const rateLimitMessage = document.createElement('span');
-                rateLimitMessage.innerHTML = "Liian monta pyyntöä, odota hetki ja lataa sivu uudelleen.";
-                userCount.append(rateLimitMessage);
-              }
-
               // Get access_token from local storage
               access_token = localStorage.getItem('finnish_mastodon_users_access_token');
 
               // Follow link/button
-              let followButton = `<a id="button-action-${json.id}" href="https://${user_instance}/@${acct}" class="button button-action">Profiili</a>`;
+              // Default is to the original instance
+              let instance_link = `https://${user_instance}/@${acct}`;
+
+              // If we have access_token, let's have the authetintaced user's instance for easier following if the follow functionality is not working
+              if ( access_token ) {
+                instance_link = `https://${instance}/@${user}`;
+              }
+
+              let followButton = `<a id="button-action-${json.id}" href="${instance_link}" class="button button-action">Profiili</a>`;
 
               try {
                 if (json.emojis.length > 0) {
@@ -94,6 +86,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
               // If we have access_token, let's do magic
               if (access_token) {
+
+                // Add follow button by default
+                // Add button to button with id button-action-<user_id>
+                followButton = `<button class="button button-action">Seuraa</button>`;
 
                 // Make it possible to filter out followed users with a checkbox
                 // Only one iteration
@@ -156,20 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetch(`https://${instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`, { cache: "no-cache" })
                 .then(response => response.json())
                 .then(json_search => {
-                  let following_each_other = false;
 
                   // If user with correct ID is found, we follow the user
-                  if (json_search[0].id !== null && typeof(json_search[0].id) !== undefined && json_search[0].id === json.id) {
-                    following_each_other = true;
-                  }
-
-                  // Showing home url for profile if we do have an access token and other kind of following doesn't work
-                  if (!json_search[0].id) {
-                    followButton = `<a id="button-action-${json.id}" href="https://${instance}/@${user}" class="button button-action">Profiili</a>`;
-                  }
-
-                  // If we follow each other, add follow button
-                  if (following_each_other) {
+                  if (json_search[0].id === json.id) {
 
                     // Add button to button with id button-action-<user_id>
                     document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action">Lopeta seuraaminen</button>`;
@@ -188,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                       fetch(`https://${instance}/api/v1/accounts/${json.id}/unfollow?access_token=${access_token}`, { method: 'POST' })
                       .then(response => response.json())
-                      .then(json_unfollow => {
+                      .then(json => {
                         // Remove following class from account-card
                         document.getElementById(`user-${json.id}`).classList.remove('following');
 
@@ -209,38 +194,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (document.getElementById('filter-followed').checked) {
                           document.getElementById(`user-${json.id}`).setAttribute('hidden', 'hidden');
                         }
-                      });
-                    });
-                  }
-
-                  // If we don't follow each other, add follow button
-                  if (!following_each_other) {
-
-                    // Add button to button with id button-action-<user_id>
-                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action">Seuraa</button>`;
-
-                    // Add unfollowing class to account-card
-                    document.getElementById(`user-${json.id}`).classList.add('unfollowing');
-
-                    // Follow with a click of a button
-                    document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
-                      fetch(`https://${instance}/api/v1/accounts/${json.id}/follow?access_token=${access_token}`, { method: 'POST' })
-                      .then(response => response.json())
-                      .then(json => {
-                        // Add following class to account-card
-                        document.getElementById(`user-${json.id}`).classList.add('following');
-
-                        // Remove unfollowing class from account-card
-                        document.getElementById(`user-${json.id}`).classList.remove('unfollowing');
-
-                        // Calculate the amount of users we're following
-                        const followingCount = document.getElementsByClassName('following').length;
-
-                        // Add following count to local storage
-                        localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
-
-                        // Add button to button with id button-action-<user_id>
-                        document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/@${user}" class="button button-action">Lopeta seuraaminen</a>`;
                       });
                     });
                   }
@@ -285,7 +238,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="account-card__bio">\
                 ${bio}\
 
-                <p><a href="https://${instance}/@${acct}">Siirry profiilisivulle</a></p>\
+                <p><a href="https://${instance}/@${user}">Siirry profiilisivulle</a></p>\
               </div>\
               <div class="account-card__actions">\
                 <div class="account-card__counters">\
@@ -339,9 +292,42 @@ document.addEventListener('DOMContentLoaded', () => {
               let userCount = document.getElementById("user-count");
               userCount.innerHTML = counter;
 
+              // Default follow action
+              document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
+                fetch(`https://${instance}/api/v1/accounts/${json.id}/follow?access_token=${access_token}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(json => {
+
+                 // Add following class to account-card
+                 document.getElementById(`user-${json.id}`).classList.add('following');
+
+                 // Remove unfollowing class from account-card
+                 document.getElementById(`user-${json.id}`).classList.remove('unfollowing');
+
+                 // Calculate the amount of users we're following
+                 const followingCount = document.getElementsByClassName('following').length;
+
+                 // Add following count to local storage
+                 localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
+
+                 // Add button to button with id button-action-<user_id>
+                 document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/@${user}" class="button button-action">Lopeta seuraaminen</a>`;
+               });
+              });
+
             })
             .catch(error => {
               console.log(error);
+
+              // Update aria-busy for user-list
+              const userList = document.getElementById('user-list');
+              userList.setAttribute('aria-busy', 'false');
+
+              // Only for one iteration
+              if (counter === 0) {
+                // Replace rate limit message inside #heading-users
+                document.getElementById('heading-users').innerHTML = 'Palvelimella on juuri nyt liikaa kuormaa. Kokeile hetken päästä uudelleen...';
+              }
             }
           );
         }

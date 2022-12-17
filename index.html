@@ -56,16 +56,20 @@
     <div id="instructions" aria-hidden="true" hidden>
       <h2>Ilmoita itsesi listalle</h2>
       <p>Lista toimii suostumusperiaatteella. En lisää ketään ilman käyttäjän itsensä lupaa. Haluatko listalle? Lähetä käyttäjälle <a href="https://mementomori.social/@rolle">@rolle@mementomori.social</a> yksityisviesti tai julkinen vastaus <a href="https://mementomori.social/@rolle/109489389453580937">postaukseen</a>. Tätä listaa ei jaeta missään muualla kuin tässä URL-osoitteessa ja listan käyttäminen muuhun kuin Mastodonissa seuraamiseen on kielletty.</p>
+
       <h2>Kuinka seurata listan käyttäjiä</h2>
       <p>Suoraan tältä sivulta ei (vielä) voi seurata käyttäjiä teknisten rajoitteiden takia. Katso kuitenkin ohjeet alta käyttäjien käsin seuraamista varten.</p>
+
       <h3>Jos haluat seurata kaikkia käyttäjiä kerralla</h3>
       <p>Lataa CSV-tiedosto alta ja tuo se asetuksiisi kohdasta <b>Asetukset &rarr; Tuo / Vie &rarr; Tuo &rarr; Seurattujen lista</b>.</p>
       <p>
         <a href="following_accounts.csv" class="button">Lataa CSV</a>
       </p>
+
       <h3>Jos haluat seurata käyttäjiä yksitellen</b></h3>
       <p>Mastodon ei salli toisen instanssin kautta seuraamista teknisen rajoitteen takia, joten "suora seuraaminen" on hieman hankalaa.</p>
       <p>Olen rakentamassa listalle automatiikkaa niin, että jatkossa voisit seurata käyttäjiä suoraan tältä sivulta painamalla nappia. Jos haluat auttaa kehityksessä, <a href="https://github.com/ronilaukkarinen/finnish-mastodon-users/issues/7">katso issue #7</a>. Sitä odotellessa, lue ohjeet alta. Seuraamiseen on olemassa useampaa eri tapaa:</p>
+
       <ul>
         <li>Kopioi seurattavan ihmisen profiilin koko osoite leikepöydälle. Tämän jälkeen laita se Mastodon-instanssisi tai sovelluksesi hakuun (usein <b>Selaa</b> alta). Käyttäjän löytyessä klikkaa <b>Seuraa</b>.</li>
         <li>Lataa <a href="https://github.com/raikasdev/mastodon4-redirect">Mastodon4 Redirect</a>-selainlaajennos (<a href="https://addons.mozilla.org/en-US/firefox/addon/mastodon4-redirect/">Firefox</a> tai <a href="https://chrome.google.com/webstore/detail/mastodon4-redirect/acbfckpoogjdigldffcbldijhgnjpfnc">Chrome</a>). Laita lisäosan asetuksiin oman instanssisi URL-osoite. Tämän jälkeen klikkaa alta <b>Profiili</b>, jonka jälkeen sinut ohjataan käyttäjän profiiliin, josta voit klikata <b>Seuraa</b> suoraan onnistuneesti.</li>
@@ -74,7 +78,7 @@
       </ul>
     </div>
 
-    <h2>Käyttäjät (<span class="user-count" id="user-count" aria-live="polite">...</span>)</h2>
+    <h2 id="heading-users">Käyttäjät (<span class="user-count" id="user-count" aria-live="polite">...</span>)</h2>
 
     <!-- Filter checkbox for followed users -->
     <div id="filter-followed-container" class="input with_label boolean optional" hidden>
