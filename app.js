@@ -160,6 +160,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(response => response.json())
                 .then(json_search => {
 
+                  // Get buttons inside elements that do NOT have following class
+                  const buttons_for_not_following = document.querySelectorAll(`#user-${json.id}:not(.following) button`);
+
+                  // Remove has-no-action class from all buttons from users we're not following
+                  for (let i = 0; i < buttons_for_not_following.length; i++) {
+                    buttons_for_not_following[i].classList.remove('has-no-action');
+                  }
+
                   // If user with correct ID is found, we follow the user
                   if (json_search[0].id === json.id) {
 
@@ -187,8 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Remove following class from account-card
                         document.getElementById(`user-${json.id}`).classList.remove('following');
 
-                        // Remove button from button with id button-action-<user_id>
-                        document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action has-action">Seuraa</button>`;
+                        // Change to follow button
+                        document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action
+                        has-action">Seuraa</button>`;
 
                         // Calculate the amount of users we're following
                         const followingCount = document.getElementsByClassName('following').length;
