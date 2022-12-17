@@ -29,28 +29,39 @@ document.addEventListener('DOMContentLoaded', (event) => {
           let parts = line.split(",");
           let user = parts[0];
           let acct = user.split("@")[0];
-          let instance = user.split("@")[1];
+          let user_instance = user.split("@")[1];
 
-          // Exceptions for vivaldi.net and testausserveri.fi
-          // Add instances to array
-          let instanceExceptions = [
-            "vivaldi.net",
-            "mastodon.ellipsis.fi",
-            "mastodon.testausserveri.fi",
-            "masto.henkkalaukka.fi",
-          ];
+          // If we're to use the user's instance
+          let instance = user_instance;
 
-          // Check if instance is in array
-          if (instanceExceptions.includes(instance)) {
-
-            // If instance is in array, change user to acct
-            user = acct;
-
-            // Exception for vivaldi.net
-            if ( instance === "vivaldi.net" ) {
-              instance = "social.vivaldi.net";
-            }
+          // Exceptions for testausserveri.fi still needed with my own instance
+          if (user_instance === "mastodon.testausserveri.fi") {
+            user = acct + "@testausserveri.fi";
           }
+
+          // Use my own instance instead to avoid rate limits
+          instance = "mementomori.social";
+
+          // Exceptions for vivaldi.net and testausserveri.fi (only needed if the official instance is used as API URL)
+          // Add instances to array
+          // let instanceExceptions = [
+          //   "vivaldi.net",
+          //   "mastodon.ellipsis.fi",
+          //   "mastodon.testausserveri.fi",
+          //   "masto.henkkalaukka.fi",
+          // ];
+
+          // // Check if instance is in array
+          // if (instanceExceptions.includes(instance)) {
+
+          //   // If instance is in array, change user to acct
+          //   user = acct;
+
+          //   // Exception for vivaldi.net
+          //   if ( instance === "vivaldi.net" ) {
+          //     instance = "social.vivaldi.net";
+          //   }
+          // }
 
           fetch("https://" + instance + "/api/v1/accounts/lookup?acct=" + user, { cache: "force-cache" })
           .then(response => response.json())
