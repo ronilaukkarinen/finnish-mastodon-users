@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="account-card__bio">\
                 ${bio}\
 
-                <p><a href="https://${instance}/@${user}">Siirry profiilisivulle</a></p>\
+                <p><a href="${instance_link}">Siirry profiilisivulle</a></p>\
               </div>\
               <div class="account-card__actions">\
                 <div class="account-card__counters">\
