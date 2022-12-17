@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.history.replaceState({}, document.title, "/" + window.location.pathname.split("/")[1] + "/");
   }
 
-  // Parse CSV and add users with XMLHTTPRequest, without jQuery
+  // Parse CSV and add users with XMLHTTPRequest
   const req = new XMLHttpRequest();
   req.open('GET', 'following_accounts.csv', true);
   req.send(null);
@@ -47,27 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
           // Use my own instance instead to avoid rate limits
           instance = "mementomori.social";
 
-          // Exceptions for vivaldi.net and testausserveri.fi (only needed if the official instance is used as API URL)
-          // Add instances to array
-          // let instanceExceptions = [
-          //   "vivaldi.net",
-          //   "mastodon.ellipsis.fi",
-          //   "mastodon.testausserveri.fi",
-          //   "masto.henkkalaukka.fi",
-          // ];
-
-          // // Check if instance is in array
-          // if (instanceExceptions.includes(instance)) {
-
-          //   // If instance is in array, change user to acct
-          //   user = acct;
-
-          //   // Exception for vivaldi.net
-          //   if ( instance === "vivaldi.net" ) {
-          //     instance = "social.vivaldi.net";
-          //   }
-          // }
-
           fetch("https://" + instance + "/api/v1/accounts/lookup?acct=" + user, { cache: "force-cache" })
           .then(response => response.json())
           .then(json => {
@@ -82,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
               // Follow link/button
-              let followButton = `<a href="https://${instance}/@${user}" class="button button-action">Profiili</a>`;
+              let followButton = `<a id="button-action-${json.id}" href="https://${user_instance}/@${user}" class="button button-action">Profiili</a>`;
 
               try {
                 if (json.emojis.length > 0) {
@@ -93,6 +72,64 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                   }
               } catch (e) {}
+
+              // Get access_token from local storage
+              access_token = localStorage.getItem('finnish_mastodon_users_access_token');
+
+              // If we have access_token, let's do magic
+              if (access_token) {
+
+                // Fetch and store authed user's ID to a variable
+                let authed_user_id = "";
+                fetch(`https://${instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
+                .then(response => response.json())
+                .then(json_me => {
+                  // Save authed user's ID to local storage
+                  authed_user_id = json_me.id;
+                  localStorage.setItem('finnish_mastodon_users_authed_user_id', authed_user_id);
+                });
+
+                // Get authed user id from local storage
+                authed_user_id = localStorage.getItem('finnish_mastodon_users_authed_user_id');
+
+                // Check if we follow the user by using the search endpoint
+                fetch(`https://${instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`, { cache: "no-cache" })
+                .then(response => response.json())
+                .then(json_search => {
+
+                  console.log(json.id);
+                  console.log(json_search[0].id);
+                  let following_each_other = false;
+
+                  // If user with correct ID is found, we follow the user
+                  if (json_search[0].id === json.id) {
+                    following_each_other = true;
+                  }
+
+                  // If we follow each other, add follow button
+                  if (following_each_other) {
+
+                    // Add button to button with id button-action-<user_id>
+                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/web/follow_requests/${json.id}" class="button button-action">Lopeta seuraaminen</a>`;
+                  }
+
+                  // If we don't follow each other, add follow button
+                  if (!following_each_other) {
+
+                    // Add button to button with id button-action-<user_id>
+                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/web/follow_requests/${json.id}" class="button button-action">Seuraa</a>`;
+                  }
+
+                  // If we are the user, add edit button
+                  if (json.id === authed_user_id) {
+
+                    // Add button to button with id button-action-<user_id>
+                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${user_instance}/settings/profile" class="button button-action">Muokkaa</a>`;
+                  }
+                }
+              );
+
+              }
 
               // User template
               let userTemplate = `
@@ -119,6 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
               </a>\
               <div class="account-card__bio">\
                 ${bio}\
+
+                <p><a href="https://${instance}/@${user}">Siirry profiilisivulle</a></p>\
               </div>\
               <div class="account-card__actions">\
                 <div class="account-card__counters">\

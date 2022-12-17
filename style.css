@@ -387,7 +387,9 @@ a.account-card__permalink:hover {
 
 .account-card__bio a {
   color: var(--color-white);
+  position: relative;
   text-decoration: underline;
+  z-index: 20;
 }
 
 .account-card__bio a:focus,
