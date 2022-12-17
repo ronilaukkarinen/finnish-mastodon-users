@@ -139,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let authed_user_id = "";
 
                 // Get authed_user_instance from local storage
-                authed_user_instance = localStorage.getItem('finnish_mastodon_users_authed_user_instance');
+                authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
 
                 fetch(`https://${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
                 .then(response => response.json())
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
 
                       // Get authed_user_instance from local storage
-                      authed_user_instance = localStorage.getItem('finnish_mastodon_users_authed_user_instance');
+                      authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
 
                       fetch(`https://${authed_user_instance}/api/v1/accounts/${json.id}/unfollow?access_token=${access_token}`, { method: 'POST' })
                       .then(response => response.json())
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
               document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
 
                 // Get authed_user_instance from local storage
-                authed_user_instance = localStorage.getItem('finnish_mastodon_users_authed_user_instance');
+                authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
 
                 fetch(`https://${authed_user_instance}/api/v1/accounts/${json.id}/follow?access_token=${access_token}`, { method: 'POST' })
                 .then(response => response.json())
