@@ -60,16 +60,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 display_name = acct;
               }
 
+              // If response 429
+              if (json.error === "Rate limit exceeded") {
+                // Update aria-busy for user-count
+                const userCount = document.getElementById('user-count');
+                userCount.setAttribute('aria-busy', 'false');
+
+                // Update aria-busy for user-list
+                const userList = document.getElementById('user-list');
+                userList.setAttribute('aria-busy', 'false');
+
+                // Append rate limit message inside user count element, use .append() instead of .innerHTML
+                const rateLimitMessage = document.createElement('span');
+                rateLimitMessage.innerHTML = "Liian monta pyyntöä, odota hetki ja lataa sivu uudelleen.";
+                userCount.append(rateLimitMessage);
+              }
+
               // Get access_token from local storage
               access_token = localStorage.getItem('finnish_mastodon_users_access_token');
 
               // Follow link/button
               let followButton = `<a id="button-action-${json.id}" href="https://${user_instance}/@${acct}" class="button button-action">Profiili</a>`;
-
-              // Showing home url for profile if we do have an access token
-              if (access_token) {
-                followButton = `<a id="button-action-${json.id}" href="https://${instance}/@${user}" class="button button-action">Profiili</a>`;
-              }
 
               try {
                 if (json.emojis.length > 0) {
@@ -150,6 +161,11 @@ document.addEventListener('DOMContentLoaded', () => {
                   // If user with correct ID is found, we follow the user
                   if (json_search[0].id !== null && typeof(json_search[0].id) !== undefined && json_search[0].id === json.id) {
                     following_each_other = true;
+                  }
+
+                  // Showing home url for profile if we do have an access token and other kind of following doesn't work
+                  if (!json_search[0].id) {
+                    followButton = `<a id="button-action-${json.id}" href="https://${instance}/@${user}" class="button button-action">Profiili</a>`;
                   }
 
                   // If we follow each other, add follow button
@@ -295,6 +311,22 @@ document.addEventListener('DOMContentLoaded', () => {
               // Count users
               counter++;
 
+              // Determine when counter is 100, this is why we decide the list as loaded up long enough
+              if (counter > 100) {
+
+                // Update aria-busy for user-count
+                const userCount = document.getElementById('user-count');
+                userCount.setAttribute('aria-busy', 'false');
+
+                // Update aria-busy for user-list
+                const userList = document.getElementById('user-list');
+                userList.setAttribute('aria-busy', 'false');
+
+                // Hide skeleton
+                const skeleton = document.getElementById('skeleton');
+                skeleton.style.display = 'none';
+              }
+
               // Append userTemplate to user-list, use Vanilla JS .append
               let userList = document.getElementById("user-list");
               let userTemplateNode = document.createRange().createContextualFragment(userTemplate);
@@ -306,12 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
               // Update user-count
               let userCount = document.getElementById("user-count");
               userCount.innerHTML = counter;
-
-              // Update aria-busy for user-count
-              userCount.setAttribute('aria-busy', 'false');
-
-              // Update aria-busy for user-list
-              userList.setAttribute('aria-busy', 'false');
 
             })
             .catch(error => {

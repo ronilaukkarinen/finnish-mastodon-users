@@ -564,6 +564,74 @@ textarea {
   margin-top: 27px;
 }
 
+/* Skeleton */
+.skeleton {
+  margin-bottom: 16px;
+}
+
+.skeleton .status__avatar {
+  background-color: var(--color-dark-electric-blue);
+  border-radius: 4px;
+  display: block;
+  height: 46px;
+  overflow: hidden;
+  position: relative;
+  width: 46px;
+}
+
+.skeleton .add-skeleton::before {
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-name: gradient-animation;
+  background-image: linear-gradient(to right, #606984 25%, #7f8bae 50%, #606984 100%);
+  content: '';
+  filter: blur(5px);
+  height: 100%;
+  left: 0%;
+  position: absolute;
+  top: 0;
+  width: 50px;
+}
+
+.skeleton li {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.skeleton .add-skeleton {
+  background-color: #606984;
+  color: transparent;
+  overflow: hidden;
+  position: relative;
+}
+
+.skeleton strong {
+  display: inline-flex;
+  height: 20px;
+  margin-bottom: 5px;
+}
+
+.skeleton .display-name {
+  display: inline-block;
+}
+
+/* stylelint-disable-next-line */
+.user-list[aria-busy="true"] {
+  /* stylelint-disable-next-line */
+  display: none !important;
+}
+
+@keyframes gradient-animation {
+  from {
+    left: 0%;
+  }
+
+  to {
+    left: 100%;
+  }
+}
+
 @media (min-width: 601px) {
   input[type="url"].auth-input {
     border-bottom-right-radius: 0;
