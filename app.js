@@ -91,6 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Add button to button with id button-action-<user_id>
                 followButton = `<button class="button button-action">Seuraa</button>`;
 
+                // Get authed_user_instance from local storage
+                authed_user_instance = localStorage.getItem('finnish_mastodon_users_authed_user_instance');
+
                 // Make it possible to filter out followed users with a checkbox
                 // Only one iteration
                 if (counter === 0) {
