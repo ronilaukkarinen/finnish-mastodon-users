@@ -1,6 +1,11 @@
 // DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
 
+  // If we have index.html in URL, remove it
+  if (window.location.href.includes("index.html")) {
+    window.history.replaceState({}, document.title, "/" + window.location.pathname.split("/")[1] + "/");
+  }
+
   // Parse CSV and add users with XMLHTTPRequest, without jQuery
   const req = new XMLHttpRequest();
   req.open('GET', 'following_accounts.csv', true);
