@@ -300,12 +300,6 @@ button[aria-controls="instructions"]:hover {
   transition: height, padding, opacity, padding .2s cubic-bezier(.4, 0, .2, 1);
 }
 
-@media (max-width: 470px) {
-  .user-list .collapsed .account-card__title .display-name {
-    max-width: 45vw;
-  }
-}
-
 .user-list .collapsed .account-card__title {
   margin: 0;
 }
@@ -335,7 +329,7 @@ button[aria-controls="instructions"]:hover {
 
 .user-list .collapsed .account-card__actions {
   height: auto;
-  margin-top: -44px;
+  margin-top: -40px;
   opacity: 1;
 }
 
@@ -387,7 +381,9 @@ a.account-card__permalink:hover {
 
 .account-card__bio a {
   color: var(--color-white);
+  position: relative;
   text-decoration: underline;
+  z-index: 20;
 }
 
 .account-card__bio a:focus,
@@ -495,6 +491,43 @@ a.account-card__permalink:hover {
 }
 
 /* Forms */
+.input.boolean .label_input {
+  padding-left: 28px;
+}
+
+.input.with_label .label_input > label {
+  color: var(--color-white);
+  display: block;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  word-wrap: break-word;
+}
+
+.input.boolean .label_input__wrapper {
+  position: static;
+}
+
+.input {
+  position: relative;
+}
+
+.input .label_input {
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.has-access-token #instructions + h2 {
+  margin-bottom: 0;
+}
+
+.input.boolean label.checkbox {
+  left: 0;
+  position: absolute;
+  top: 2px;
+}
+
 .label_input > label {
   color: var(--color-white);
   display: block;
@@ -529,6 +562,74 @@ textarea {
 .label_input {
   margin-bottom: 27px;
   margin-top: 27px;
+}
+
+/* Skeleton */
+.skeleton {
+  margin-bottom: 16px;
+}
+
+.skeleton .status__avatar {
+  background-color: var(--color-dark-electric-blue);
+  border-radius: 4px;
+  display: block;
+  height: 46px;
+  overflow: hidden;
+  position: relative;
+  width: 46px;
+}
+
+.skeleton .add-skeleton::before {
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-name: gradient-animation;
+  background-image: linear-gradient(to right, #606984 25%, #7f8bae 50%, #606984 100%);
+  content: '';
+  filter: blur(5px);
+  height: 100%;
+  left: 0%;
+  position: absolute;
+  top: 0;
+  width: 50px;
+}
+
+.skeleton li {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.skeleton .add-skeleton {
+  background-color: #606984;
+  color: transparent;
+  overflow: hidden;
+  position: relative;
+}
+
+.skeleton strong {
+  display: inline-flex;
+  height: 20px;
+  margin-bottom: 5px;
+}
+
+.skeleton .display-name {
+  display: inline-block;
+}
+
+/* stylelint-disable-next-line */
+.user-list[aria-busy="true"] {
+  /* stylelint-disable-next-line */
+  display: none !important;
+}
+
+@keyframes gradient-animation {
+  from {
+    left: 0%;
+  }
+
+  to {
+    left: 100%;
+  }
 }
 
 @media (min-width: 601px) {
@@ -583,12 +684,38 @@ textarea {
     transform: translateY(2px);
   }
 
+  .display-name__account,
   .status__display-name {
     width: 60vw;
   }
 
   footer {
     margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 477px) {
+  /* .user-list .collapsed .account-card__title .display-name {
+    max-width: 45vw;
+  } */
+
+  .user-list .collapsed .button-action {
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 460px) {
+  /* stylelint-disable */
+  .account-card__counters {
+    display: none;
+  }
+
+  .account-card__actions {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    margin-bottom: 10px;
+    margin-top: 16px;
   }
 }
 
