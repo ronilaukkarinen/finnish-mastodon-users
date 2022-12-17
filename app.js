@@ -55,13 +55,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 display_name = twemoji.parse(display_name, {className: "emojione"});
                 bio = twemoji.parse(bio, {className: "emojione"});
 
-                // If display name is empty, use username
-                if (display_name === "") {
-                  display_name = acct;
-                }
+              // If display name is empty, use username
+              if (display_name === "") {
+                display_name = acct;
+              }
+
+              // Get access_token from local storage
+              access_token = localStorage.getItem('finnish_mastodon_users_access_token');
 
               // Follow link/button
               let followButton = `<a id="button-action-${json.id}" href="https://${user_instance}/@${acct}" class="button button-action">Profiili</a>`;
+
+              // Showing home url for profile if we do have an access token
+              if (access_token) {
+                followButton = `<a id="button-action-${json.id}" href="https://${instance}/@${user}" class="button button-action">Profiili</a>`;
+              }
 
               try {
                 if (json.emojis.length > 0) {
@@ -72,9 +80,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                   }
               } catch (e) {}
-
-              // Get access_token from local storage
-              access_token = localStorage.getItem('finnish_mastodon_users_access_token');
 
               // If we have access_token, let's do magic
               if (access_token) {
@@ -102,10 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Add hidden attribute to hide the element
                         following[i].setAttribute('hidden', 'hidden');
 
-                        // Update user count from finnish_mastodon_users_following_count local storage
+                        // Update user count by substracting amount from finnish_mastodon_users_following_count local storage
                         const followingCount = localStorage.getItem('finnish_mastodon_users_following_count');
+                        const totalUsercount = localStorage.getItem('finnish_mastodon_users_count');
                         const userCount = document.getElementById('user-count');
-                        userCount.innerHTML = followingCount;
+                        userCount.innerHTML = totalUsercount - followingCount;
                       }
                     } else {
                       // Show all elements that have a following class
@@ -142,7 +148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   let following_each_other = false;
 
                   // If user with correct ID is found, we follow the user
-                  if (json_search[0].id && json_search[0].id === json.id) {
+                  if (json_search[0].id !== null && typeof(json_search[0].id) !== undefined && json_search[0].id === json.id) {
                     following_each_other = true;
                   }
 
@@ -150,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   if (following_each_other) {
 
                     // Add button to button with id button-action-<user_id>
-                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/@${user}" class="button button-action">Lopeta seuraaminen</a>`;
+                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action">Lopeta seuraaminen</button>`;
 
                     // Add following class to account-card
                     document.getElementById(`user-${json.id}`).classList.add('following');
@@ -160,16 +166,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Add following count to local storage
                     localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
+
+                    // Unfollow with a click of a button
+                    document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
+
+                      fetch(`https://${instance}/api/v1/accounts/${json.id}/unfollow?access_token=${access_token}`, { method: 'POST' })
+                      .then(response => response.json())
+                      .then(json_unfollow => {
+                        // Remove following class from account-card
+                        document.getElementById(`user-${json.id}`).classList.remove('following');
+
+                        // Remove button from button with id button-action-<user_id>
+                        document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action">Seuraa</button>`;
+
+                        // Calculate the amount of users we're following
+                        const followingCount = document.getElementsByClassName('following').length;
+
+                        // Add following count to local storage
+                        localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
+
+                        // Update user count from finnish_mastodon_users_following_count local storage
+                        const userCount = document.getElementById('user-count');
+                        userCount.innerHTML = followingCount;
+
+                        // If filter-followed is checked, hide the account-card
+                        if (document.getElementById('filter-followed').checked) {
+                          document.getElementById(`user-${json.id}`).setAttribute('hidden', 'hidden');
+                        }
+                      });
+                    });
                   }
 
                   // If we don't follow each other, add follow button
                   if (!following_each_other) {
 
                     // Add button to button with id button-action-<user_id>
-                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/@${user}" class="button button-action">Seuraa</a>`;
+                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action">Seuraa</button>`;
 
                     // Add unfollowing class to account-card
                     document.getElementById(`user-${json.id}`).classList.add('unfollowing');
+
+                    // Follow with a click of a button
+                    document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
+                      fetch(`https://${instance}/api/v1/accounts/${json.id}/follow?access_token=${access_token}`, { method: 'POST' })
+                      .then(response => response.json())
+                      .then(json => {
+                        // Add following class to account-card
+                        document.getElementById(`user-${json.id}`).classList.add('following');
+
+                        // Remove unfollowing class from account-card
+                        document.getElementById(`user-${json.id}`).classList.remove('unfollowing');
+
+                        // Calculate the amount of users we're following
+                        const followingCount = document.getElementsByClassName('following').length;
+
+                        // Add following count to local storage
+                        localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
+
+                        // Add button to button with id button-action-<user_id>
+                        document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${instance}/@${user}" class="button button-action">Lopeta seuraaminen</a>`;
+                      });
+                    });
                   }
 
                   // If we are the user, add edit button
@@ -212,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="account-card__bio">\
                 ${bio}\
 
-                <p><a href="https://${instance}/@${user}">Siirry profiilisivulle</a></p>\
+                <p><a href="https://${instance}/@${acct}">Siirry profiilisivulle</a></p>\
               </div>\
               <div class="account-card__actions">\
                 <div class="account-card__counters">\
@@ -242,6 +299,9 @@ document.addEventListener('DOMContentLoaded', () => {
               let userList = document.getElementById("user-list");
               let userTemplateNode = document.createRange().createContextualFragment(userTemplate);
               userList.append(userTemplateNode);
+
+              // Save the final count to local storage
+              localStorage.setItem('finnish_mastodon_users_count', counter);
 
               // Update user-count
               let userCount = document.getElementById("user-count");

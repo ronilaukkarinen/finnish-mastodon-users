@@ -329,7 +329,7 @@ button[aria-controls="instructions"]:hover {
 
 .user-list .collapsed .account-card__actions {
   height: auto;
-  margin-top: -44px;
+  margin-top: -40px;
   opacity: 1;
 }
 
