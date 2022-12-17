@@ -97,23 +97,20 @@ addEventListener('DOMContentLoaded', () => {
   // Initial login button
   authButton.innerText = 'Kirjaudu sisään';
 
-  // If we have just logged out, get true from cookie
-  if (getCookie('finnish_mastodon_users_logged_out') == 'true') {
+  // If we have just logged out
+  if (window.location.href.includes('logout=true')) {
     // Remove access token cookie
     document.cookie = "finnish_mastodon_users_access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     access_token = null;
-
-    // Set logged out to false
-    document.cookie = "finnish_mastodon_users_logged_out=false; path=/;";
-
-    // Remove logged out from cookies
-    document.cookie = "finnish_mastodon_users_logged_out=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
     // Remove finnish_mastodon_users_token_redirect
     document.cookie = "finnish_mastodon_users_token_redirect=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
     // Remove finnish_mastodon_users_instance
     document.cookie = "finnish_mastodon_users_instance=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    // Clear logout from URL
+    window.history.replaceState({}, document.title, "/" + window.location.pathname.split("/")[1] + "/");
   } else {
     // Get access_token from a cookie
     access_token = getCookie('finnish_mastodon_users_access_token');

@@ -38,9 +38,6 @@ if ( isset( $_GET['revoke'] ) ) {
   // Get the instance URL from cookie
   $instance = $_COOKIE['finnish_mastodon_users_instance'];
 
-  // Set logged out cookie to true
-  setcookie( 'finnish_mastodon_users_logged_out', 'true', time() + ( 10 * 365 * 24 * 60 * 60 ) );
-
   // POST revoke request
   $client = new GuzzleHttp\Client();
   $response = $client->request( 'POST', $instance . '/oauth/revoke', [
@@ -52,7 +49,7 @@ if ( isset( $_GET['revoke'] ) ) {
   ] );
 
 // Redirect back to the app
-header( 'Location: ' . $redirect_uri );
+header( 'Location: ' . $redirect_uri . '?logout=true' );
 
 } else {
   // Check if we already have the code
