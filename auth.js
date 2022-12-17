@@ -30,10 +30,10 @@ function auth() {
   } else {
 
     // Save instance URL to local storage
-    localStorage.setItem('finnish_mastodon_user_authed_instance', authInstance.value);
+    localStorage.setItem('finnish_mastodon_users_authed_user_instance', authInstance.value);
 
     // Add instance URL as variable
-    const authedInstance = localStorage.getItem('finnish_mastodon_user_authed_instance');
+    const authedInstance = localStorage.getItem('finnish_mastodon_users_authed_user_instance');
 
     // Authorize with our own auth.php file from current location
     const auth = new URL(window.location.href + "auth.php?instance=" + authedInstance);
@@ -49,13 +49,13 @@ function revoke() {
   const authButton = document.getElementById('button-auth');
 
   // Instance URL
-  const authedInstance = localStorage.getItem('finnish_mastodon_user_authed_instance');
+  const authedInstance = localStorage.getItem('finnish_mastodon_users_authed_instance');
 
   // Clear the value of the instance URL field
   document.getElementById('auth-instance').value = '';
 
   // Remove the instance URL from local storage
-  localStorage.removeItem('finnish_mastodon_user_authed_instance');
+  localStorage.removeItem('finnish_mastodon_users_authed_instance');
 
   // Change button text
   authButton.innerText = 'Kirjaudu sisään';
@@ -132,7 +132,7 @@ addEventListener('DOMContentLoaded', () => {
     authButton.innerText = 'Kirjaudu ulos';
 
     // Lock instance URL field and add instance URL to it
-    authInstance.value = localStorage.getItem('finnish_mastodon_user_authed_instance');
+    authInstance.value = localStorage.getItem('finnish_mastodon_users_authed_instance');
     authInstance.setAttribute('readonly', true);
 
     // Add event listener to logout button
