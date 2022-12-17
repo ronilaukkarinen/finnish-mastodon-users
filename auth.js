@@ -14,21 +14,21 @@ addEventListener('DOMContentLoaded', () => {
   if (localStorage.getItem('finnish_mastodon_users_access_token')) {
 
     // Change login button to logout button
-    authButton.innerText = 'Kirjaudu ulos'
+    authButton.innerText = 'Kirjaudu ulos';
 
     // Lock instance URL field and add instance URL to it
-    authInstance.value = localStorage.getItem('finnish_mastodon_user_authed_instance')
+    authInstance.value = localStorage.getItem('finnish_mastodon_user_authed_instance');
     authInstance.setAttribute('readonly', true)
 
     authButton.addEventListener('click', (event) => {
       localStorage.removeItem('code')
-      authButton.innerText = 'Kirjaudu sisään'
+      authButton.innerText = 'Kirjaudu sisään';
 
       // Revoke access token with our own auth.php file
-      const revoke = new URL("auth.php?instance=" + authedInstance + "&revoke=true")
+      const revoke = new URL(window.location.href + "auth.php?instance=" + authedInstance + "&revoke=true");
 
       // Go to Mastodon auth page
-      window.location.href = `${revoke}`
+      window.location.href = `${revoke}`;
     })
   } else {
     // Authenticate request with a click of a button
@@ -43,16 +43,16 @@ addEventListener('DOMContentLoaded', () => {
         authInstance.classList.add('is-invalid');
       } else {
         // Save instance URL to local storage
-        localStorage.setItem('finnish_mastodon_user_authed_instance', authInstance.value)
+        localStorage.setItem('finnish_mastodon_user_authed_instance', authInstance.value);
 
         // Add instance URL as variable
-        const authedInstance = localStorage.getItem('finnish_mastodon_user_authed_instance')
+        const authedInstance = localStorage.getItem('finnish_mastodon_user_authed_instance');
 
-        // Authorize with our own auth.php file
-        const auth = new URL("auth.php?instance=" + authedInstance)
+        // Authorize with our own auth.php file from current location
+        const auth = new URL(window.location.href + "auth.php?instance=" + authedInstance);
 
         // Go to Mastodon auth page
-        window.location.href = `${auth}`
+        window.location.href = `${auth}`;
       }
     })
   }

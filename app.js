@@ -169,6 +169,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let user = document.getElementById("user-"+id);
     let button = document.getElementById("button-"+id);
 
+    // Check if user is undefined and do nothing if it is
+    if (user === null) {
+      return;
+    }
+
     if (user.classList.contains("collapsed")) {
       user.classList.remove("collapsed");
       button.getElementsByTagName("span")[0].innerHTML = "Piilota lisätiedot";
