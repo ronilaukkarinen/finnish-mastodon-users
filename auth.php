@@ -1,6 +1,6 @@
 <?php
 // Disable some rules we don't need here
-// phpcs:disable WordPress.NamingConventions, WordPress.WhiteSpace, WordPress.Security, Generic.WhiteSpace, WordPress.WP, Generic.Formatting.MultipleStatementAlignment, PEAR.Functions.FunctionCallSignature, WordPress.Arrays.ArrayIndentation, WordPress.Arrays.MultipleStatementAlignment, Generic.Arrays.DisallowShortArraySyntax
+// phpcs:disable WordPress.NamingConventions, WordPress.WhiteSpace, WordPress.Security, Generic.WhiteSpace, WordPress.WP, Generic.Formatting.MultipleStatementAlignment, PEAR.Functions.FunctionCallSignature, WordPress.Arrays.ArrayIndentation, WordPress.Arrays.MultipleStatementAlignment, Generic.Arrays.DisallowShortArraySyntax, Squiz.PHP.CommentedOutCode
 // Require composer
 require './vendor/autoload.php';
 
@@ -9,10 +9,8 @@ $dotenv = Dotenv\Dotenv::createImmutable( '../' );
 $dotenv->load();
 
 // Get .env variables
-$client_id = $_ENV['MASTODON_CLIENT_ID'];
-$client_secret = $_ENV['MASTODON_CLIENT_SECRET'];
 $redirect_uri = $_ENV['MASTODON_REDIRECT_URI'];
-$scope = 'read+write+follow';
+$scope = 'read read:accounts read:follows write write:follows follow';
 
 // First, get the instance from GET parameter
 $instance = $_GET['instance'];
@@ -62,6 +60,10 @@ header( 'Location: ' . $redirect_uri . '?logout=true' );
     // Get the instance URL from cookie this time
     $redirect_uri_token = $_COOKIE['finnish_mastodon_users_token_redirect'];
 
+    // Get the client ID and secret from cookies
+    $client_id = $_COOKIE['finnish_mastodon_users_client_id'];
+    $client_secret = $_COOKIE['finnish_mastodon_users_client_secret'];
+
     // POST with header
     $client = new GuzzleHttp\Client();
     $response = $client->request( 'POST', $instance . '/oauth/token', [
@@ -88,7 +90,30 @@ header( 'Location: ' . $redirect_uri . '?logout=true' );
     header( 'Location: ' . $redirect_uri );
 
   } else {
-    // If we don't have the code, redirect to the instance's authorization page
-    header( 'Location: ' . $instance . '/oauth/authorize?client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '/auth.php&instance=' . $instance . '&response_type=code&scope=' . $scope );
+
+    // Create an application
+    $client = new GuzzleHttp\Client();
+    $response = $client->request( 'POST', $instance . '/api/v1/apps', [
+      'form_params' => [
+        'client_name' => 'Suomalaiset Mastodon-käyttäjät',
+        'redirect_uris' => $redirect_uri . '/auth.php',
+        'scopes' => $scope,
+        'website' => 'https://mementomori.social/suomalaiset-mastodon-kayttajat',
+      ],
+    ] );
+
+    // Decode the response
+    $response = json_decode( $response->getBody() );
+
+    // Get client ID and secret
+    $client_id = $response->client_id;
+    $client_secret = $response->client_secret;
+
+    // Save client_id and client_secret to cookies
+    setcookie( 'finnish_mastodon_users_client_id', $client_id, time() + ( 10 * 365 * 24 * 60 * 60 ) );
+    setcookie( 'finnish_mastodon_users_client_secret', $client_secret, time() + ( 10 * 365 * 24 * 60 * 60 ) );
+
+    // Redirect to the instance's authorization page
+    header( 'Location: ' . $instance . '/oauth/authorize?client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '/auth.php&instance=' . $instance . '&response_type=code&scope=' . $scope . '&force_login=true' );
   }
 }
