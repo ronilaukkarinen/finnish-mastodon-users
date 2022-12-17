@@ -1,5 +1,5 @@
 // When DOM is ready
-addEventListener('DOMContentLoaded', (event) => {
+addEventListener('DOMContentLoaded', () => {
 
   // Set locale for moment.js
   moment.locale('fi');

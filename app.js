@@ -1,5 +1,5 @@
 // DOMContentLoaded
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', () => {
 
   // Parse CSV and add users with XMLHTTPRequest, without jQuery
   const req = new XMLHttpRequest();
