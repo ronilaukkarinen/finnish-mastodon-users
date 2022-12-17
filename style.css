@@ -300,12 +300,6 @@ button[aria-controls="instructions"]:hover {
   transition: height, padding, opacity, padding .2s cubic-bezier(.4, 0, .2, 1);
 }
 
-@media (max-width: 470px) {
-  .user-list .collapsed .account-card__title .display-name {
-    max-width: 45vw;
-  }
-}
-
 .user-list .collapsed .account-card__title {
   margin: 0;
 }
@@ -497,6 +491,43 @@ a.account-card__permalink:hover {
 }
 
 /* Forms */
+.input.boolean .label_input {
+  padding-left: 28px;
+}
+
+.input.with_label .label_input > label {
+  color: var(--color-white);
+  display: block;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  word-wrap: break-word;
+}
+
+.input.boolean .label_input__wrapper {
+  position: static;
+}
+
+.input {
+  position: relative;
+}
+
+.input .label_input {
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.has-access-token #instructions + h2 {
+  margin-bottom: 0;
+}
+
+.input.boolean label.checkbox {
+  left: 0;
+  position: absolute;
+  top: 2px;
+}
+
 .label_input > label {
   color: var(--color-white);
   display: block;
@@ -585,12 +616,38 @@ textarea {
     transform: translateY(2px);
   }
 
+  .display-name__account,
   .status__display-name {
     width: 60vw;
   }
 
   footer {
     margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 477px) {
+  /* .user-list .collapsed .account-card__title .display-name {
+    max-width: 45vw;
+  } */
+
+  .user-list .collapsed .button-action {
+    pointer-events: none;
+    visibility: hidden;
+  }
+}
+
+@media (max-width: 460px) {
+  /* stylelint-disable */
+  .account-card__counters {
+    display: none;
+  }
+
+  .account-card__actions {
+    display: grid;
+    grid-auto-columns: minmax(0, 1fr);
+    margin-bottom: 10px;
+    margin-top: 16px;
   }
 }
 

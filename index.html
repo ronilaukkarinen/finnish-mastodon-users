@@ -76,6 +76,18 @@
 
     <h2>Käyttäjät (<span class="user-count" id="user-count" aria-live="polite">...</span>)</h2>
 
+    <!-- Filter checkbox for followed users -->
+    <div id="filter-followed-container" class="input with_label boolean optional" hidden>
+      <div class="label_input">
+        <label class="boolean optional" for="account_bot">Piilota käyttäjät, joita seuraan</label>
+        <div class="label_input__wrapper">
+          <label class="checkbox">
+            <input class="boolean optional" type="checkbox" name="filter-followed" id="filter-followed">
+          </label>
+        </div>
+      </div>
+    </div>
+
     <ul class="user-list" id="user-list" aria-live="polite">Ladataan...</ul>
   </section>
 
