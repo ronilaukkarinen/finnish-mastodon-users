@@ -4,7 +4,7 @@
 
 // Fetch individual user json locally to a directory from following_accounts.csv
 // Usage: php fetch.php
-// Cron job for every 1 hour: 0 * * * * php /home/mastodon/suomalaiset-mastodon-kayttajat/fetch.php
+// Cron job for every 1 hour: 0 * * * * cd /home/mastodon/suomalaiset-mastodon-kayttajat && php /home/mastodon/suomalaiset-mastodon-kayttajat/fetch.php > /dev/null 2>&1
 
 // Set up some variables
 $csv = 'following_accounts.csv';
