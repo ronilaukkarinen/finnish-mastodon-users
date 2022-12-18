@@ -329,12 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(json => {
 
                  // Add following class to account-card
-                 // document.getElementById(`user-${json.id}`).classList.add('following');
-                 document.getElementById(`actions__button-${json.id}`).parentNode.parentNode.parentNode.classList.add('following');
-
-                 // Remove unfollowing class from account-card
-                //  document.getElementById(`user-${json.id}`).classList.remove('unfollowing');
-                 document.getElementById(`actions__button-${json.id}`).parentNode.parentNode.parentNode.classList.remove('following');
+                 document.getElementById(`user-${json.id}`).classList.add('following');
 
                  // Calculate the amount of users we're following
                  const followingCount = document.getElementsByClassName('following').length;
