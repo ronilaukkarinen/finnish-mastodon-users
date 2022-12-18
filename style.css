@@ -716,10 +716,6 @@ textarea {
 }
 
 @media (max-width: 477px) {
-  /* .user-list .collapsed .account-card__title .display-name {
-    max-width: 45vw;
-  } */
-
   .user-list .collapsed .button-action {
     pointer-events: none;
     visibility: hidden;
@@ -737,6 +733,8 @@ textarea {
     grid-auto-columns: minmax(0, 1fr);
     margin-bottom: 10px;
     margin-top: 16px;
+    position: relative;
+    z-index: 999;
   }
 }
 
