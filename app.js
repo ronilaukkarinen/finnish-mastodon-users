@@ -1,3 +1,32 @@
+// Cache functions
+let cache = {};
+async function getData(url){
+  let result = "";
+  if(cache[url] !== undefined) return cache[url].value;
+
+  await fetch(url)
+  .then(response => response.json())
+  .then(json => cache[url] = {time: new Date(), value: json});
+
+  return cache[url].value;
+}
+
+// Interval to clear cache;
+setInterval(function () {
+  if (Object.keys(cache).length > 0) {
+    let currentTime = new Date();
+    Object.keys(cache).forEach(key => {
+      let seconds = currentTime - cache[key].time;
+
+        // If cache is older than 30 minutes, delete it
+        if (seconds > 1800) {
+          delete cache[key];
+          console.log(`${key}'s cache deleted`)
+        }
+      })
+    }
+}, 3000);
+
 // DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -47,8 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
           // Use my own instance instead to avoid rate limits
           instance = "mementomori.social";
 
-          fetch("https://" + instance + "/api/v1/accounts/lookup?acct=" + user, { cache: "force-cache" })
-          .then(response => response.json())
+          getData("https://" + instance + "/api/v1/accounts/lookup?acct=" + user)
           .then(json => {
             let display_name = json.display_name;
             let bio = json.note;
