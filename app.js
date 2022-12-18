@@ -1,31 +1,39 @@
 // Cache functions
 let cache = {};
-async function getData(url){
-  let result = "";
-  if (cache[url] !== undefined) return cache[url].value;
 
-  await fetch(url)
-  .then(response => response.json())
-  .then(json => cache[url] = {time: new Date(), value: json});
-
-  return cache[url].value;
+// Better caching function
+async function getData(url) {
+  return new Promise((resolve, reject) => {
+    if (cache[url]) {
+      resolve(cache[url].data);
+    } else {
+      fetch(url, { cache: "force-cache" })
+      .then(response => response.json())
+      .then(data => {
+        cache[url] = {
+          data: data,
+          time: new Date()
+        };
+        resolve(data);
+      })
+      .catch(error => {
+        reject(error);
+      });
+    }
+  });
 }
 
-// Interval to clear cache;
-setInterval(function () {
-  if (Object.keys(cache).length > 0) {
-    let currentTime = new Date();
-    Object.keys(cache).forEach(key => {
-      let seconds = currentTime - cache[key].time;
-
-        // If cache is older than 30 minutes, delete it
-        if (seconds > 1800) {
-          delete cache[key];
-          console.log(`${key}'s cache deleted`)
-        }
-      })
+// Better interval to clear cache with more human readable times
+setInterval(() => {
+  let now = new Date();
+  const clearCacheTimeMinutes = 30;
+  const clearCacheTime = clearCacheTimeMinutes * 60 * 1000;
+  for (let url in cache) {
+    if (now - cache[url].time > clearCacheTime) {
+      delete cache[url];
     }
-}, 3000);
+  }
+}, 1000 * 60);
 
 // DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -180,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (counter === 0) {
                   getData(`${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`)
                   // fetch(`${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
-                  .then(response => response.json())
+                  // .then(response => response.json())
                   .then(json_me => {
 
                   // Save authed user's ID to local storage
@@ -195,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Check if we follow the user by using the search endpoint
                 getData(`${authed_user_instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`)
                 // fetch(`${authed_user_instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`, { cache: "no-cache" })
-                .then(response => response.json())
+                // .then(response => response.json())
                 .then(json_search => {
 
                   // If request is not rate limited
