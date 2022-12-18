@@ -2,7 +2,7 @@
 let cache = {};
 async function getData(url){
   let result = "";
-  if(cache[url] !== undefined) return cache[url].value;
+  if (cache[url] !== undefined) return cache[url].value;
 
   await fetch(url)
   .then(response => response.json())
@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
           instance = "mementomori.social";
 
           getData("https://" + instance + "/api/v1/accounts/lookup?acct=" + user)
+          // fetch("https://" + instance + "/api/v1/accounts/lookup?acct=" + user, { cache: "force-cache" })
           .then(json => {
             let display_name = json.display_name;
             let bio = json.note;
@@ -121,6 +122,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Add follow button by default
                 // Add button to button with id button-action-<user_id>
                 followButton = `<button class="button button-action has-no-action" data-url="${authed_user_instance}/@${acct}@${user_instance}">Seuraa</button>`;
+
+                // Add class to body that we don't have a filtering feature
+                document.body.classList.add('has-user-filtering-disabled');
 
                 // Make it possible to filter out followed users with a checkbox
                 // Only one iteration
@@ -174,7 +178,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Only one iteration
                 if (counter === 0) {
-                  fetch(`${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
+                  getData(`${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`)
+                  // fetch(`${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
                   .then(response => response.json())
                   .then(json_me => {
 
@@ -188,7 +193,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 authed_user_id = localStorage.getItem('finnish_mastodon_users_authed_user_id');
 
                 // Check if we follow the user by using the search endpoint
-                fetch(`${authed_user_instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`, { cache: "no-cache" })
+                getData(`${authed_user_instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`)
+                // fetch(`${authed_user_instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`, { cache: "no-cache" })
                 .then(response => response.json())
                 .then(json_search => {
 
@@ -202,6 +208,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     for (let i = 0; i < buttons_for_not_following.length; i++) {
                       buttons_for_not_following[i].classList.remove('has-no-action');
                     }
+
+                    // Show filtering
+                    document.body.classList.remove('has-user-filtering-disabled');
                   }
 
                   // If user with correct ID is found, we follow the user

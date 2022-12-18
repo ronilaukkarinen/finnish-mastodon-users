@@ -518,8 +518,13 @@ a.account-card__permalink:hover {
   margin-top: 16px;
 }
 
-.has-access-token #instructions + h2 {
+.has-access-token:not(.has-user-filtering-disabled) #instructions + h2 {
   margin-bottom: 0;
+}
+
+/* stylelint-disable-next-line */
+.has-user-filtering-disabled #filter-followed-container {
+  display: none;
 }
 
 .input.boolean label.checkbox {
