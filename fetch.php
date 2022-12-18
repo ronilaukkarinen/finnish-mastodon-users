@@ -14,6 +14,12 @@ $csv_data = array_slice($csv_data, 1); // Remove header row
 $csv_data = array_map(null, ...$csv_data); // Transpose array
 $csv_data = array_combine($csv_data[0], $csv_data[1]); // Make array associative
 
+// Simple bash colors
+$red = "\033[0;31m";
+$green = "\033[0;32m";
+$yellow = "\033[0;33m";
+$reset = "\033[0m";
+
 // Only allow command line use
 if (php_sapi_name() !== 'cli') {
   die('This script can only be run from the command line.');
@@ -26,26 +32,38 @@ foreach ($csv_data as $key => $value) {
     $key = str_replace('mastodon.testausserveri.fi', 'testausserveri.fi', $key);
   }
 
-  $url = 'https://mementomori.social/api/v1/accounts/lookup?acct=' . $key;
-  $json = file_get_contents($url);
-  $obj = json_decode($json);
-
-  if (empty($obj)) {
-    echo 'No user found for ' . $key . PHP_EOL;
-    continue;
-  }
-
-  // Save json to file, use username as file name
+  // Define json file, use username as file name
   $file = $dir . '/' . $key . '.json';
 
   // If file exists, skip it
   if ( file_exists( $file ) ) {
-    echo $key . ' already exists, skipping' . PHP_EOL;
+    echo "${yellow}" . $key . ' already exists, skipping' . "${reset}" . PHP_EOL;
     continue;
-  } else {
-    file_put_contents($file, $json);
-  }
 
-  // Echo message
-  echo $key . ' saved to ' . $file . PHP_EOL;
+  } else {
+    $url = 'https://mementomori.social/api/v1/accounts/lookup?acct=' . $key;
+    $json = file_get_contents($url);
+    $obj = json_decode($json);
+
+    if (empty($obj)) {
+      echo "${red}No user found for ${key}${reset}" . PHP_EOL;
+      continue;
+    } else {
+      file_put_contents($file, $json);
+      echo "${green}User ${key} saved to ${file}${reset}" . PHP_EOL;
+    }
+  }
 }
+
+// Save number of users from csv to a file usercount.json
+// Get files except usercount.json
+$files = array_diff( scandir( $dir ), array( '..', '.', 'usercount.json' ) );
+
+// Count files
+$count = count( $files );
+
+// Save count to file
+file_put_contents( $dir . '/usercount.json', $count );
+
+// Echo message
+echo "${green}User count ${count} saved to ${dir}/usercount.json${reset}" . PHP_EOL;

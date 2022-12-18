@@ -349,8 +349,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
               counter++;
 
-              // Determine when counter is 100, this is why we decide the list as loaded up long enough
-              if (counter > 100) {
+              if (counter === 1) {
+                // Get user count from file/usercount.json
+                fetch('cache/usercount.json')
+                .then(response => response.text())
+                .then(usercountNumber => {
+                  // Add user count number to local storage
+                  localStorage.setItem('finnish_mastodon_users_count', usercountNumber);
+                });
+              }
+
+              // Get user count number from local storage
+              const realUserCount = localStorage.getItem('finnish_mastodon_users_count');
+
+              // Determine when counter is the user count amount
+              if (counter > realUserCount - 1) {
 
                 // Update aria-busy for user-count
                 const userCount = document.getElementById('user-count');
@@ -369,9 +382,6 @@ document.addEventListener('DOMContentLoaded', () => {
               let userList = document.getElementById("user-list");
               let userTemplateNode = document.createRange().createContextualFragment(userTemplate);
               userList.append(userTemplateNode);
-
-              // Save the final count to local storage
-              localStorage.setItem('finnish_mastodon_users_count', counter);
 
               // Update user-count
               let userCount = document.getElementById("user-count");
