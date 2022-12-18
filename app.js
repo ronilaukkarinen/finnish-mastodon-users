@@ -38,7 +38,7 @@ setInterval(() => {
 // Fetch local json file data
 async function getLocalJsonData(url) {
   return new Promise((resolve, reject) => {
-    fetch(url, { cache: "force-cache" })
+    fetch(url, { cache: "no-cache" })
     .then(response => response.json())
     .then(data => {
       resolve(data);
@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
               const realUserCount = localStorage.getItem('finnish_mastodon_users_count');
 
               // Determine when counter is the user count amount
-              if (counter > realUserCount - 1) {
+              if (counter > realUserCount - 4) {
 
                 // Update aria-busy for user-count
                 const userCount = document.getElementById('user-count');
