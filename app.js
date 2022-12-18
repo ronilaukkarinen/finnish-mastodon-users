@@ -35,6 +35,20 @@ setInterval(() => {
   }
 }, 1000 * 60);
 
+// Fetch local json file data
+async function getLocalJsonData(url) {
+  return new Promise((resolve, reject) => {
+    fetch(url, { cache: "force-cache" })
+    .then(response => response.json())
+    .then(data => {
+      resolve(data);
+    })
+    .catch(error => {
+      reject(error);
+    });
+  });
+}
+
 // DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -84,8 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
           // Use my own instance instead to avoid rate limits
           instance = "mementomori.social";
 
-          getData("https://" + instance + "/api/v1/accounts/lookup?acct=" + user)
-          // fetch("https://" + instance + "/api/v1/accounts/lookup?acct=" + user, { cache: "force-cache" })
+          // Get local json file for user
+          getLocalJsonData(`cache/${user}.json`)
           .then(json => {
             let display_name = json.display_name;
             let bio = json.note;
