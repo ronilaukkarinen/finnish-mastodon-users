@@ -449,4 +449,22 @@ document.addEventListener('DOMContentLoaded', () => {
       window.open(url, '_blank');
     }
   });
+
+  // Filter with search input
+  document.getElementById("search").addEventListener("keyup", function() {
+    let search = document.getElementById("search").value.toLowerCase();
+    let users = document.getElementsByClassName("account-card");
+
+    for (let i = 0; i < users.length; i++) {
+      let account_username = users[i].getElementsByClassName("display-name__account")[0].innerHTML.toLowerCase();
+      let account_display_name = users[i].getElementsByClassName("display-name")[0].innerHTML.toLowerCase();
+      let account_bio = users[i].getElementsByClassName("account-card__bio")[0].innerHTML.toLowerCase();
+
+      if (account_bio.includes(search) || account_display_name.includes(search) || account_username.includes(search)) {
+        users[i].style.display = "block";
+      } else {
+        users[i].style.display = "none";
+      }
+    }
+  });
 });
