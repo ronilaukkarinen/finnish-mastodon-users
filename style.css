@@ -641,13 +641,13 @@ textarea {
   input[type="url"].auth-input {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;
-    width: 75%;
+    width: 74%;
   }
 
   .button#button-auth {
     border-bottom-left-radius: 0;
     border-top-left-radius: 0;
-    width: 25%;
+    width: 26%;
   }
 }
 
