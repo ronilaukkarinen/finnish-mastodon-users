@@ -1,40 +1,3 @@
-// Cache functions
-let cache = {};
-
-// Better caching function
-async function getData(url) {
-  return new Promise((resolve, reject) => {
-    if (cache[url]) {
-      resolve(cache[url].data);
-    } else {
-      fetch(url, { cache: "force-cache" })
-      .then(response => response.json())
-      .then(data => {
-        cache[url] = {
-          data: data,
-          time: new Date()
-        };
-        resolve(data);
-      })
-      .catch(error => {
-        reject(error);
-      });
-    }
-  });
-}
-
-// Better interval to clear cache with more human readable times
-setInterval(() => {
-  let now = new Date();
-  const clearCacheTimeMinutes = 30;
-  const clearCacheTime = clearCacheTimeMinutes * 60 * 1000;
-  for (let url in cache) {
-    if (now - cache[url].time > clearCacheTime) {
-      delete cache[url];
-    }
-  }
-}, 1000 * 60);
-
 // Fetch local json file data
 async function getLocalJsonData(url) {
   return new Promise((resolve, reject) => {
@@ -200,9 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Only one iteration
                 if (counter === 0) {
-                  getData(`${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`)
-                  // fetch(`${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
-                  // .then(response => response.json())
+                  fetch(`${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
+                  .then(response => response.json())
                   .then(json_me => {
 
                   // Save authed user's ID to local storage
@@ -215,79 +177,84 @@ document.addEventListener('DOMContentLoaded', () => {
                 authed_user_id = localStorage.getItem('finnish_mastodon_users_authed_user_id');
 
                 // Check if we follow the user by using the search endpoint
-                getData(`${authed_user_instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`)
-                // fetch(`${authed_user_instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`, { cache: "no-cache" })
-                // .then(response => response.json())
+                fetch(`${authed_user_instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`, { cache: "no-cache" })
+                .then(response => response.json())
                 .then(json_search => {
 
-                  // If request is not rate limited
-                  if (json_search.error !== "Too many requests") {
+                  // Get buttons inside elements that do NOT have following class
+                  const buttons_for_not_following = document.querySelectorAll(`#user-${json.id}:not(.following) button`);
 
-                    // Get buttons inside elements that do NOT have following class
-                    const buttons_for_not_following = document.querySelectorAll(`#user-${json.id}:not(.following) button`);
+                  // If request is NOT rate limited
+                  if (json_search.error !== "Too many requests") {
 
                     // Remove has-no-action class from all buttons from users we're not following
                     for (let i = 0; i < buttons_for_not_following.length; i++) {
                       buttons_for_not_following[i].classList.remove('has-no-action');
                     }
 
-                    // Show filtering
-                    document.body.classList.remove('has-user-filtering-disabled');
-                  }
+                    // If user with correct ID is found, we follow the user
+                    if (json_search[0].id === json.id) {
 
-                  // If user with correct ID is found, we follow the user
-                  if (json_search[0].id === json.id) {
+                      // Add button to button with id button-action-<user_id>
+                      document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action">Lopeta seuraaminen</button>`;
 
-                    // Add button to button with id button-action-<user_id>
-                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action">Lopeta seuraaminen</button>`;
+                      // Add following class to account-card
+                      document.getElementById(`user-${json.id}`).classList.add('following');
 
-                    // Add following class to account-card
-                    document.getElementById(`user-${json.id}`).classList.add('following');
+                      // Calculate the amount of users we're following
+                      const followingCount = document.getElementsByClassName('following').length;
 
-                    // Calculate the amount of users we're following
-                    const followingCount = document.getElementsByClassName('following').length;
+                      // Add following count to local storage
+                      localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
 
-                    // Add following count to local storage
-                    localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
+                      // Unfollow with a click of a button
+                      document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
 
-                    // Unfollow with a click of a button
-                    document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
+                        // Get authed_user_instance from local storage
+                        authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
 
-                      // Get authed_user_instance from local storage
-                      authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
+                        fetch(`${authed_user_instance}/api/v1/accounts/${json.id}/unfollow`, {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + access_token
+                          }
+                        })
+                        .then(response => response.json())
+                        .then(json => {
+                          // Remove following class from account-card
+                          document.getElementById(`user-${json.id}`).classList.remove('following');
 
-                      fetch(`${authed_user_instance}/api/v1/accounts/${json.id}/unfollow`, {
-                        method: 'POST',
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'Authorization': 'Bearer ' + access_token
-                        }
-                      })
-                      .then(response => response.json())
-                      .then(json => {
-                        // Remove following class from account-card
-                        document.getElementById(`user-${json.id}`).classList.remove('following');
+                          // Change to follow button
+                          document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action has-action">Seuraa</button>`;
 
-                        // Change to follow button
-                        document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action
-                        has-action">Seuraa</button>`;
+                          // Calculate the amount of users we're following
+                          const followingCount = document.getElementsByClassName('following').length;
 
-                        // Calculate the amount of users we're following
-                        const followingCount = document.getElementsByClassName('following').length;
+                          // Add following count to local storage
+                          localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
 
-                        // Add following count to local storage
-                        localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
+                          // Update user count from finnish_mastodon_users_following_count local storage
+                          const userCount = document.getElementById('user-count');
+                          userCount.innerHTML = followingCount;
 
-                        // Update user count from finnish_mastodon_users_following_count local storage
-                        const userCount = document.getElementById('user-count');
-                        userCount.innerHTML = followingCount;
-
-                        // If filter-followed is checked, hide the account-card
-                        if (document.getElementById('filter-followed').checked) {
-                          document.getElementById(`user-${json.id}`).setAttribute('hidden', 'hidden');
-                        }
+                          // If filter-followed is checked, hide the account-card
+                          if (document.getElementById('filter-followed').checked) {
+                            document.getElementById(`user-${json.id}`).setAttribute('hidden', 'hidden');
+                          }
+                        });
                       });
-                    });
+                    }
+                  } else {
+                    // If IS rate limited
+
+                    // Get buttons inside elements that do NOT have following class
+                    buttons = document.querySelectorAll(`#user-${json.id} button`);
+
+                    // Add has-no-action class from all buttons from users we're not following
+                    for (let i = 0; i < buttons_for_not_following.length; i++) {
+                      buttons_for_not_following[i].classList.add('has-no-action');
+                    }
                   }
 
                   // If we are the user, add edit button
