@@ -256,7 +256,13 @@ document.addEventListener('DOMContentLoaded', () => {
                       // Get authed_user_instance from local storage
                       authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
 
-                      fetch(`${authed_user_instance}/api/v1/accounts/${json.id}/unfollow?access_token=${access_token}`, { method: 'POST' })
+                      fetch(`${authed_user_instance}/api/v1/accounts/${json.id}/unfollow`, {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'Authorization': 'Bearer ' + access_token
+                        }
+                      })
                       .then(response => response.json())
                       .then(json => {
                         // Remove following class from account-card
@@ -393,7 +399,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get authed_user_instance from local storage
                 authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
 
-                fetch(`${authed_user_instance}/api/v1/accounts/${json.id}/follow?access_token=${access_token}`, { method: 'POST' })
+                // Follow
+                fetch(`${authed_user_instance}/api/v1/accounts/${json.id}/follow`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + access_token
+                  }
+                })
                 .then(response => response.json())
                 .then(json => {
 
