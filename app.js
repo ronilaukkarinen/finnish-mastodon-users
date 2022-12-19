@@ -192,6 +192,15 @@ document.addEventListener('DOMContentLoaded', () => {
                       buttons_for_not_following[i].classList.remove('has-no-action');
                     }
 
+                    // Get user count number from local storage
+                    const realUserCount = localStorage.getItem('finnish_mastodon_users_count');
+
+                    if (counter > realUserCount - 4) {
+
+                      // Remove has user filtering disabled from body
+                      document.body.classList.remove('has-user-filtering-disabled');
+                    }
+
                     // If user with correct ID is found, we follow the user
                     if (json_search[0].id === json.id) {
 
@@ -250,6 +259,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Get buttons inside elements that do NOT have following class
                     buttons = document.querySelectorAll(`#user-${json.id} .button-action`);
+
+                    // When counter is full
+                    if (counter > realUserCount - 4) {
+                                          // Hide skeleton
+                      const skeleton = document.getElementById('skeleton');
+                      skeleton.style.display = 'none';
+                    }
 
                     // Add has-no-action class from all buttons from users we're not following
                     for (let i = 0; i < buttons.length; i++) {

@@ -532,6 +532,10 @@ a.account-card__permalink:hover {
   display: none;
 }
 
+#filter-followed-container.input.boolean .label_input {
+  margin-top: 0;
+}
+
 .input.boolean label.checkbox {
   left: 0;
   position: absolute;
