@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     buttons = document.querySelectorAll(`#user-${json.id} .button-action`);
 
                     // Add has-no-action class from all buttons from users we're not following
-                    for (let i = 0; i < buttons_for_not_following.length; i++) {
+                    for (let i = 0; i < buttons.length; i++) {
                       buttons_for_not_following[i].classList.add('has-no-action');
                     }
                   }
