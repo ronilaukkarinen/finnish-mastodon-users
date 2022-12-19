@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .then(json_search => {
 
                   // Get buttons inside elements that do NOT have following class
-                  const buttons_for_not_following = document.querySelectorAll(`#user-${json.id}:not(.following) button`);
+                  const buttons_for_not_following = document.querySelectorAll(`#user-${json.id}:not(.following) .button-action`);
 
                   // If request is NOT rate limited
                   if (json_search.error !== "Too many requests") {
@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // If IS rate limited
 
                     // Get buttons inside elements that do NOT have following class
-                    buttons = document.querySelectorAll(`#user-${json.id} button`);
+                    buttons = document.querySelectorAll(`#user-${json.id} .button-action`);
 
                     // Add has-no-action class from all buttons from users we're not following
                     for (let i = 0; i < buttons_for_not_following.length; i++) {
