@@ -2,7 +2,7 @@
 
 This is a source code of the list for Finnish Mastodon users. The visual HTML list populates automatically from the CSV data with a help of Mastodon REST API.
 
-![_Users_rolle_Projects_suomalaiset-mastodon-kayttajat_index html (1)](https://user-images.githubusercontent.com/1534150/206854327-2919be07-6793-4edd-be1e-5211570f0c58.png)
+![Animation](https://user-images.githubusercontent.com/1534150/208782193-30ab6df0-d06d-49fa-920c-b60d88d2de87.gif)
 
 ## How to add yourself to the list
 
