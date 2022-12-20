@@ -772,7 +772,7 @@ input[type="search"]::-webkit-search-cancel-button {
     display: none;
   }
 
-  .account-card__actions {
+  .account-card:not(.collapsed) .account-card__actions {
     display: grid;
     grid-auto-columns: minmax(0, 1fr);
     margin-bottom: 10px;
