@@ -51,17 +51,8 @@ function lookupUsers() {
     }
   })
 
-  // Calculate how many of users can be called within 5 minutes
-  let usersPerFiveMinutes = 300;
-
-  // Calculate how many users can be called within 5 minutes
-  let usersPerSecond = usersPerFiveMinutes / 300;
-
-  // Calculate how many seconds we need to wait between each user
-  let secondsBetweenUsers = 1 / usersPerSecond;
-
-  // In milliseconds
-  let milliSeondsBetweenUsers = secondsBetweenUsers * 1000;
+  // Get milliseconds for 300 requests per 5 minutes
+  let milliSeondsBetweenUsers = 1000 * 60 * 5 / 300;
 
   // Get authed_user_instance from local storage
   authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
@@ -90,6 +81,10 @@ function lookupUsers() {
 
         // Update #heading-users-title title when checking users
         document.getElementById('heading-users-title').innerHTML = `Tarkistetaan seurataanko käyttäjää...`;
+
+        // Add class checking to heading-users-title and user-count
+        document.getElementById('heading-users-title').classList.add('checking');
+        document.getElementById('user-count').classList.add('checking');
 
         // Update #user-count title when checking users
         document.getElementById('user-count').innerHTML = `${i}/${userAmount}`;
@@ -228,6 +223,18 @@ function lookupUsers() {
         }
       });
     }, milliSeondsBetweenUsers * i);
+
+    // When we are done, restore heading and user count
+    if (i == listedUsers.length - 1) {
+      setTimeout(function() {
+        document.getElementById('heading').innerHTML = 'Käyttäjät';
+        document.getElementById('user-count').innerHTML = listedUsers.length;
+
+        // Remove checking classes
+        document.getElementById('heading').classList.remove('checking');
+        document.getElementById('user-count').classList.remove('checking');
+      }, milliSeondsBetweenUsers * i);
+    }
   }
 }
 
@@ -353,8 +360,68 @@ function unFollowAction(e) {
  });
 }
 
+function filterFollowedUsers() {
+  // Get users from local storage
+  let listedUsers = JSON.parse(localStorage.getItem('finnish_mastodon_users')) || [];
+
+  // Get following count from local storage
+  const followingCount = localStorage.getItem('finnish_mastodon_users_following_count');
+
+  // Get authed user's ID from local storage
+  const authedUserID = localStorage.getItem('finnish_mastodon_user_authed_id');
+
+  // Get filterFollowed checkbox
+  const filterFollowed = document.getElementById('filter-followed');
+
+  // If filterFollowed is checked, filter out users we're already following
+  if ( filterFollowed.checked ) {
+    // Hide all elements that have a following class
+    const following = document.getElementsByClassName('following');
+    for (let i = 0; i < following.length; i++) {
+
+      // Add hidden attribute to hide the element
+      following[i].setAttribute('hidden', 'hidden');
+
+      // Update user count by substracting amount from finnish_mastodon_users_following_count local storage
+      if ( !document.getElementById('user-count').classList.contains('checking') ) {
+        const followingCount = localStorage.getItem('finnish_mastodon_users_following_count');
+        const totalUsercount = localStorage.getItem('finnish_mastodon_users_count');
+        const userCount = document.getElementById('user-count');
+        userCount.innerHTML = totalUsercount - followingCount;
+      }
+    }
+  } else {
+    // Show all elements that have a following class
+    const following = document.getElementsByClassName('following');
+    for (let i = 0; i < following.length; i++) {
+      // Remove hidden attribute to show the element
+      following[i].removeAttribute('hidden');
+
+      // Restore user count number to the original number
+      if ( !document.getElementById('user-count').classList.contains('checking') ) {
+        const totalUsercount = localStorage.getItem('finnish_mastodon_users_count');
+        const userCount = document.getElementById('user-count');
+        userCount.innerHTML = totalUsercount;
+      }
+    }
+  }
+}
+
 // DOMContentLoaded event used to make sure all HTML is loaded
 document.addEventListener('DOMContentLoaded', function() {
+
+  // Get access token from local storage
+  access_token = localStorage.getItem('finnish_mastodon_users_access_token');
+
+  if ( access_token ) {
+    // Remove hidden from #filter-followed-container
+    document.getElementById('filter-followed-container').removeAttribute('hidden');
+
+    // Listener for filter-followed checkbox
+    document.getElementById('filter-followed').addEventListener('change', function() {
+      filterFollowedUsers();
+    });
+  }
 
   // If button has has-no-action class, add event listener to open profile in new window
   document.addEventListener("click", function(e) {
