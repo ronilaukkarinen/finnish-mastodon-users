@@ -269,6 +269,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  function showAllUsers() {
+    let users = document.getElementsByClassName("account-card");
+    for (let i = 0; i < users.length; i++) {
+      users[i].style.display = "block";
+    }
+  }
+
   // Filter with search input
   document.getElementById("search").addEventListener("keyup", function() {
     let search = document.getElementById("search").value.toLowerCase();
@@ -284,6 +291,13 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         users[i].style.display = "none";
       }
+    }
+  });
+
+  // Show all users when search cancel button is clicked
+  document.getElementById("search").addEventListener("search", function(event) {
+    if (event.target.value === "") {
+      showAllUsers();
     }
   });
 });
