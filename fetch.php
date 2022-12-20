@@ -35,9 +35,12 @@ foreach ($csv_data as $key => $value) {
   // Define json file, use username as file name
   $file = $dir . '/' . $key . '.json';
 
-  // If file exists, skip it
-  if ( file_exists( $file ) ) {
-    echo "${yellow}" . $key . ' already exists, skipping' . "${reset}" . PHP_EOL;
+  // Get avatar URL from json entry
+  $avatar_url = $value;
+
+  // If file exists and it's less than 1 day old, skip it
+  if ( file_exists( $file)  && filemtime( $file ) > strtotime( '-1 day' ) ) {
+    echo "${yellow}" . $key . ' is under a day old, skipping' . "${reset}" . PHP_EOL;
     continue;
 
   } else {

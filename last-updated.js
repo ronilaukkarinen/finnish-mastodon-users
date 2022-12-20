@@ -17,6 +17,9 @@ addEventListener('DOMContentLoaded', () => {
     const lastUpdated = response.headers.get('Last-Modified');
     const lastUpdatedDate = moment(lastUpdated);
 
+    // Save last updated time to local storage
+    localStorage.setItem('finnish_mastodon_users_last_updated', lastUpdatedDate);
+
     const lastUpdatedElement = document.getElementById('updated');
 
     // Add last updated in textual format to element title attribute

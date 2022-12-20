@@ -64,6 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
           // Get local json file for user
           getLocalJsonData(`cache/${user}.json`)
           .then(json => {
+            let user_id = json.id;
+            let acct = json.acct;
             let display_name = json.display_name;
             let bio = json.note;
                 display_name = twemoji.parse(display_name, {className: "emojione"});
@@ -77,16 +79,21 @@ document.addEventListener('DOMContentLoaded', () => {
               // Get access_token from local storage
               access_token = localStorage.getItem('finnish_mastodon_users_access_token');
 
-              // Follow link/button
-              // Default is to the original instance
+              // Default to the original instance
               let instance_link = `https://${user_instance}/@${acct}`;
+
+              // Follow button for logged out users
+              let followButton = `<a id="button-action-${json.id}" href="${instance_link}" class="button button-action" aria-label="Mene käyttäjän ${acct} profiiliin">Profiili</a>`;
 
               // If we have access_token, let's have the authetintaced user's instance for easier following if the follow functionality is not working
               if ( access_token ) {
-                instance_link = `https://${instance}/@${user}`;
-              }
+                // Get authed_user_instance from local storage
+                authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
+                instance_link = `${authed_user_instance}/@${user}`;
 
-              let followButton = `<a id="button-action-${json.id}" href="${instance_link}" class="button button-action">Profiili</a>`;
+                // Follow button for logged in users
+                followButton = `<button id="button-action-${json.id}" class="button button-action has-no-action" aria-label="Seuraa käyttäjää ${acct}, avautuu uuteen ikkunaan" data-follow-id="${json.id}" data-url="${instance_link}">Seuraa</button>`;
+              }
 
               try {
                 if (json.emojis.length > 0) {
@@ -98,206 +105,10 @@ document.addEventListener('DOMContentLoaded', () => {
                   }
               } catch (e) {}
 
-              // If we have access_token, let's do magic
-              if (access_token) {
-
-                // Get authed_user_instance from local storage
-                authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
-
-                // Add follow button by default
-                // Add button to button with id button-action-<user_id>
-                followButton = `<button class="button button-action has-no-action" data-url="${authed_user_instance}/@${acct}@${user_instance}">Seuraa</button>`;
-
-                // Add class to body that we don't have a filtering feature
-                document.body.classList.add('has-user-filtering-disabled');
-
-                // Make it possible to filter out followed users with a checkbox
-                // Only one iteration
-                if (counter === 0) {
-
-                  // Remove hidden attribute from filter-followed-container
-                  const filterFollowedContainer = document.getElementById('filter-followed-container');
-                  filterFollowedContainer.removeAttribute('hidden');
-
-                  // Add class to body that we have access_token
-                  document.body.classList.add('has-access-token');
-
-                  // Get filterFollowed checkbox
-                  const filterFollowed = document.getElementById('filter-followed');
-
-                  filterFollowed.addEventListener('change', function() {
-                    if (this.checked) {
-
-                      // Hide all elements that have a following class
-                      const following = document.getElementsByClassName('following');
-                      for (let i = 0; i < following.length; i++) {
-                        // Add hidden attribute to hide the element
-                        following[i].setAttribute('hidden', 'hidden');
-
-                        // Update user count by substracting amount from finnish_mastodon_users_following_count local storage
-                        const followingCount = localStorage.getItem('finnish_mastodon_users_following_count');
-                        const totalUsercount = localStorage.getItem('finnish_mastodon_users_count');
-                        const userCount = document.getElementById('user-count');
-                        userCount.innerHTML = totalUsercount - followingCount;
-                      }
-                    } else {
-                      // Show all elements that have a following class
-                      const following = document.getElementsByClassName('following');
-                      for (let i = 0; i < following.length; i++) {
-                        // Remove hidden attribute to show the element
-                        following[i].removeAttribute('hidden');
-
-                        // Restore user count number to the original number
-                        const userCount = document.getElementById('user-count');
-                        userCount.innerHTML = counter;
-                      }
-                    }
-                  });
-                }
-
-                // Fetch and store authed user's ID to a variable
-                let authed_user_id = "";
-
-                // Get authed_user_instance from local storage
-                authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
-
-                // Only one iteration
-                if (counter === 0) {
-                  fetch(`${authed_user_instance}/api/v1/accounts/verify_credentials?access_token=${access_token}`, { cache: "force-cache" })
-                  .then(response => response.json())
-                  .then(json_me => {
-
-                  // Save authed user's ID to local storage
-                  authed_user_id = json_me.id;
-                  localStorage.setItem('finnish_mastodon_users_authed_user_id', authed_user_id);
-                  });
-                }
-
-                // Get authed user id from local storage
-                authed_user_id = localStorage.getItem('finnish_mastodon_users_authed_user_id');
-
-                // Check if we follow the user by using the search endpoint
-                fetch(`${authed_user_instance}/api/v1/accounts/search?q=${user}&following=true&access_token=${access_token}&limit=1`, { cache: "no-cache" })
-                .then(response => response.json())
-                .then(json_search => {
-
-                  // Get buttons inside elements that do NOT have following class
-                  const buttons_for_not_following = document.querySelectorAll(`#user-${json.id}:not(.following) .button-action`);
-
-                  // If request is NOT rate limited
-                  if (json_search.error !== "Too many requests") {
-
-                    // Remove has-no-action class from all buttons from users we're not following
-                    for (let i = 0; i < buttons_for_not_following.length; i++) {
-                      buttons_for_not_following[i].classList.remove('has-no-action');
-                    }
-
-                    // Get user count number from local storage
-                    const realUserCount = localStorage.getItem('finnish_mastodon_users_count');
-
-                    if (counter > realUserCount - 4) {
-
-                      // Remove has user filtering disabled from body
-                      document.body.classList.remove('has-user-filtering-disabled');
-                    }
-
-                    // If user with correct ID is found, we follow the user
-                    if (json_search[0].id === json.id) {
-
-                      // Add button to button with id button-action-<user_id>
-                      document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action">Lopeta seuraaminen</button>`;
-
-                      // Add following class to account-card
-                      document.getElementById(`user-${json.id}`).classList.add('following');
-
-                      // Calculate the amount of users we're following
-                      const followingCount = document.getElementsByClassName('following').length;
-
-                      // Add following count to local storage
-                      localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
-
-                      // Unfollow with a click of a button
-                      document.getElementById(`actions__button-${json.id}`).addEventListener('click', function(e) {
-
-                        // Get authed_user_instance from local storage
-                        authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
-
-                        fetch(`${authed_user_instance}/api/v1/accounts/${json.id}/unfollow`, {
-                          method: 'POST',
-                          headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + access_token
-                          }
-                        })
-                        .then(response => response.json())
-                        .then(json => {
-                          // Remove following class from account-card
-                          document.getElementById(`user-${json.id}`).classList.remove('following');
-
-                          if ( json.error === "Record not found" ) {
-                            let url = e.target.getAttribute("data-url");
-
-                            // Open to new window
-                            window.open(url, '_blank');
-                          }
-
-                          // Change to follow button
-                          document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action has-action">Seuraa</button>`;
-
-                          // Calculate the amount of users we're following
-                          const followingCount = document.getElementsByClassName('following').length;
-
-                          // Add following count to local storage
-                          localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
-
-                          // Update user count from finnish_mastodon_users_following_count local storage
-                          const userCount = document.getElementById('user-count');
-                          userCount.innerHTML = followingCount;
-
-                          // If filter-followed is checked, hide the account-card
-                          if (document.getElementById('filter-followed').checked) {
-                            document.getElementById(`user-${json.id}`).setAttribute('hidden', 'hidden');
-                          }
-                        });
-                      });
-                    }
-                  } else {
-                    // If IS rate limited
-
-                    // Get buttons inside elements that do NOT have following class
-                    buttons = document.querySelectorAll(`#user-${json.id} .button-action`);
-
-                    // When counter is full
-                    if (counter > realUserCount - 4) {
-                                          // Hide skeleton
-                      const skeleton = document.getElementById('skeleton');
-                      skeleton.style.display = 'none';
-                    }
-
-                    // Add has-no-action class from all buttons from users we're not following
-                    for (let i = 0; i < buttons.length; i++) {
-                      buttons_for_not_following[i].classList.add('has-no-action');
-                    }
-                  }
-
-                  // If we are the user, add edit button
-                  if (json.id === authed_user_id) {
-
-                    // Add button to button with id button-action-<user_id>
-                    document.getElementById(`actions__button-${json.id}`).innerHTML = `<a href="https://${user_instance}/settings/profile" class="button button-action">Muokkaa</a>`;
-
-                    // Add me to account card
-                    document.getElementById(`user-${json.id}`).classList.add('me');
-                  }
-                }
-              );
-
-              }
-
               // User template
               let userTemplate = `
-              <li class="account-card collapsed" id="user-${json.id}">\
-              <button id="button-${json.id}" class="button-collapse account-card__permalink" aria-label="Näytä käyttäjän ${acct} lisätiedot" aria-expanded="false" aria-controls="user-${json.id}">\
+              <li class="account-card collapsed" id="user-${json.id}" data-user-name="${acct}@${user_instance}" data-user-id="${json.id}" data-user-instance="${user_instance}">\
+              <button id="button-collapse-${json.id}" class="button-collapse account-card__permalink" aria-label="Näytä käyttäjän ${acct} lisätiedot" aria-expanded="false" aria-controls="user-${json.id}">\
                 <span class="screen-reader-text">Näytä lisätiedot</span>\
               </button>\
                 <div class="account-card__header" aria-hidden="true">\
@@ -355,6 +166,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
               }
 
+              // If we don't already have finnish_mastodon_users or it has been an hour since last generated
+              if ( ! localStorage.getItem('finnish_mastodon_users') || ( Date.now() - localStorage.getItem('finnish_mastodon_users_timestamp') ) > 3600000 ) {
+
+                // Save timestamp of the last time user list has been generated
+                localStorage.setItem('finnish_mastodon_users_timestamp', Date.now());
+
+                // Push all users to a local storage array if they're not already there but only for the max users
+                let listedUsers = JSON.parse(localStorage.getItem('finnish_mastodon_users')) || [];
+
+                listedUsers.push({
+                  "id": user_id,
+                  "acct": acct,
+                  "instance": instance,
+                });
+
+                // If there's already amount of users in local storage, don't add more
+                if ( listedUsers.length <= localStorage.getItem('finnish_mastodon_users_count') ) {
+                  localStorage.setItem('finnish_mastodon_users', JSON.stringify(listedUsers))
+                }
+              }
+
               // Get user count number from local storage
               const realUserCount = localStorage.getItem('finnish_mastodon_users_count');
 
@@ -383,44 +215,6 @@ document.addEventListener('DOMContentLoaded', () => {
               let userCount = document.getElementById("user-count");
               userCount.innerHTML = counter;
 
-              // Default follow action
-              document.getElementById(`actions__button-${json.id}`).addEventListener('click', function(e) {
-
-                // Get authed_user_instance from local storage
-                authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
-
-                // Follow
-                fetch(`${authed_user_instance}/api/v1/accounts/${json.id}/follow`, {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + access_token
-                  }
-                })
-                .then(response => response.json())
-                .then(json => {
-
-                  if ( json.error === "Record not found" ) {
-                    let url = e.target.getAttribute("data-url");
-
-                    // Open to new window
-                    window.open(url, '_blank');
-                  }
-
-                 // Add following class to account-card
-                 document.getElementById(`user-${json.id}`).classList.add('following');
-
-                 // Calculate the amount of users we're following
-                 const followingCount = document.getElementsByClassName('following').length;
-
-                 // Add following count to local storage
-                 localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
-
-                 // Add button to button with id button-action-<user_id>
-                 document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action">Lopeta seuraaminen</button>`;
-               });
-              });
-
             })
             .catch(error => {
               console.log(error);
@@ -432,7 +226,10 @@ document.addEventListener('DOMContentLoaded', () => {
               // Only for one iteration
               if (counter === 0) {
                 // Replace rate limit message inside #heading-users
-                document.getElementById('heading-users').innerHTML = 'Palvelimella on juuri nyt liikaa kuormaa. Kokeile hetken päästä uudelleen...';
+
+                if(error.message === "Too Many Requests") {
+                  document.getElementById('heading-users').innerHTML = 'Palvelimella on juuri nyt liikaa kuormaa. Kokeile hetken päästä uudelleen...';
+                }
               }
             }
           );
@@ -443,8 +240,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Expand/Collapse single account-card based on user id
   function expandCollapseUser(id) {
-    let user = document.getElementById("user-"+id);
-    let button = document.getElementById("button-"+id);
+    // Get [data-user-id]
+    let user = document.querySelector("[data-user-id='"+id+"']");
+    let button = document.getElementById("button-collapse-"+id);
 
     // Check if user is undefined and do nothing if it is
     if (user === null) {
@@ -464,19 +262,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Run expandCollapseUser() on click
   document.addEventListener("click", function(e) {
-    if (e.target && e.target.id.includes("button-")) {
-      let id = e.target.id.split("button-")[1];
+    if (e.target && e.target.id.includes("button-collapse-")) {
+      let id = e.target.id.split("button-collapse-")[1];
       expandCollapseUser(id);
-    }
-  });
-
-  // If button has has-no-action class, get its URL and move to it
-  document.addEventListener("click", function(e) {
-    if (e.target && e.target.classList.contains("has-no-action")) {
-      let url = e.target.getAttribute("data-url");
-
-      // Open to new window
-      window.open(url, '_blank');
     }
   });
 

@@ -73,7 +73,7 @@
     </div>
 
     <div class="heading">
-      <h2 id="heading-users">Käyttäjät (<span class="user-count" id="user-count" aria-live="polite">...</span>)</h2>
+      <h2 id="heading-users"><span id="heading-users-title">Käyttäjät</span> (<span class="user-count" id="user-count" aria-live="polite">...</span>)</h2>
       <input type="search" class="search" id="search" placeholder="Suodata sanalla">
     </div>
 
@@ -103,7 +103,7 @@
     </ul>
 
     <!-- The real list -->
-    <ul class="user-list" id="user-list" aria-live="polite">Ladataan...</ul>
+    <ul class="user-list" id="user-list" aria-live="polite"></ul>
 
   </section>
 
@@ -115,5 +115,6 @@
   <script src="auth.js"></script>
   <script src="last-updated.js"></script>
   <script src="toggle-instructions.js"></script>
+  <script src="logged-in.js"></script>
 </body>
 </html>

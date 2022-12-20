@@ -223,7 +223,7 @@ div#instructions ol {
 }
 
 /* stylelint-disable-next-line */
-.button.button-unfollow:hover {
+.button.has-unfollow-action:hover {
   background-color: #df405a;
 }
 
@@ -621,6 +621,7 @@ input[type="search"]::-webkit-search-cancel-button {
   width: 46px;
 }
 
+.checking-user .button-action::before,
 .skeleton .add-skeleton::before {
   animation-duration: 1s;
   animation-iteration-count: infinite;
@@ -641,6 +642,7 @@ input[type="search"]::-webkit-search-cancel-button {
   justify-content: space-between;
 }
 
+.checking-user .button-action,
 .skeleton .add-skeleton {
   background-color: #606984;
   color: transparent;
