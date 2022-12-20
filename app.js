@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
 
                       // Unfollow with a click of a button
-                      document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
+                      document.getElementById(`actions__button-${json.id}`).addEventListener('click', function(e) {
 
                         // Get authed_user_instance from local storage
                         authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
@@ -233,6 +233,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         .then(json => {
                           // Remove following class from account-card
                           document.getElementById(`user-${json.id}`).classList.remove('following');
+
+                          if ( json.error === "Record not found" ) {
+                            let url = e.target.getAttribute("data-url");
+
+                            // Open to new window
+                            window.open(url, '_blank');
+                          }
 
                           // Change to follow button
                           document.getElementById(`actions__button-${json.id}`).innerHTML = `<button class="button button-action has-action">Seuraa</button>`;
@@ -377,7 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
               userCount.innerHTML = counter;
 
               // Default follow action
-              document.getElementById(`actions__button-${json.id}`).addEventListener('click', function() {
+              document.getElementById(`actions__button-${json.id}`).addEventListener('click', function(e) {
 
                 // Get authed_user_instance from local storage
                 authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
@@ -392,6 +399,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
                 .then(response => response.json())
                 .then(json => {
+
+                  if ( json.error === "Record not found" ) {
+                    let url = e.target.getAttribute("data-url");
+
+                    // Open to new window
+                    window.open(url, '_blank');
+                  }
 
                  // Add following class to account-card
                  document.getElementById(`user-${json.id}`).classList.add('following');
