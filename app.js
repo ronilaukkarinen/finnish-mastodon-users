@@ -166,25 +166,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
               }
 
-              // If we don't already have finnish_mastodon_users or it has been an hour since last generated
-              if ( ! localStorage.getItem('finnish_mastodon_users') || ( Date.now() - localStorage.getItem('finnish_mastodon_users_timestamp') ) > 3600000 ) {
+              // Save timestamp of the last time user list has been generated
+              localStorage.setItem('finnish_mastodon_users_timestamp', Date.now());
 
-                // Save timestamp of the last time user list has been generated
-                localStorage.setItem('finnish_mastodon_users_timestamp', Date.now());
+              // Push all users to a local storage array if they're not already there but only for the max users
+              let listedUsers = JSON.parse(localStorage.getItem('finnish_mastodon_users')) || [];
 
-                // Push all users to a local storage array if they're not already there but only for the max users
-                let listedUsers = JSON.parse(localStorage.getItem('finnish_mastodon_users')) || [];
+              // If the listed user has following parameter, don't add it to the list
+              if (listedUsers.find(user => user.following)) {
+                return;
+              }
 
-                listedUsers.push({
-                  "id": user_id,
-                  "acct": acct,
-                  "instance": instance,
-                });
+              listedUsers.push({
+                "id": user_id,
+                "acct": acct,
+                "instance": instance,
+              });
 
-                // If there's already amount of users in local storage, don't add more
-                if ( listedUsers.length <= localStorage.getItem('finnish_mastodon_users_count') ) {
-                  localStorage.setItem('finnish_mastodon_users', JSON.stringify(listedUsers))
-                }
+              // If there's already amount of users in local storage, don't add more
+              if ( listedUsers.length <= localStorage.getItem('finnish_mastodon_users_count') ) {
+                localStorage.setItem('finnish_mastodon_users', JSON.stringify(listedUsers))
               }
 
               // Get user count number from local storage

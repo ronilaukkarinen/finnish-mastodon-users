@@ -223,36 +223,26 @@ function lookupUsers() {
         }
       });
     }, milliSeondsBetweenUsers * i);
-
-    // When we are done, restore heading and user count
-    if (i == listedUsers.length - 1) {
-      setTimeout(function() {
-        document.getElementById('heading').innerHTML = 'Käyttäjät';
-        document.getElementById('user-count').innerHTML = listedUsers.length;
-
-        // Remove checking classes
-        document.getElementById('heading').classList.remove('checking');
-        document.getElementById('user-count').classList.remove('checking');
-      }, milliSeondsBetweenUsers * i);
-    }
   }
 }
 
 // Window load event used just in case window height is dependant upon images
 window.addEventListener('load', function() {
 
-  // Get authed user's ID after one second
-  setTimeout(() => {
-    getAuthedUserID();
-  }, 1000);
-
   // Get access_token from local storage
   access_token = localStorage.getItem('finnish_mastodon_users_access_token');
 
-  // After a few seconds, lookup users
-  setTimeout(function() {
-    lookupUsers();
-  }, 3000);
+  if ( access_token) {
+    // Get authed user's ID after one second
+    setTimeout(() => {
+      getAuthedUserID();
+    }, 2000);
+
+    // After a few seconds, lookup users
+    setTimeout(function() {
+      lookupUsers();
+    }, 4000);
+  }
 
 });
 
