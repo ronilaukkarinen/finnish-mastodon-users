@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
               // User template
               let userTemplate = `
-              <li class="account-card collapsed" id="user-${json.id}" data-user-name="${acct}@${user_instance}" data-user-id="${json.id}" data-user-instance="${user_instance}">\
+              <li class="account-card collapsed" id="user-${json.id}" data-user-name="${acct}" data-user-id="${json.id}" data-user-instance="${user_instance}">\
               <button id="button-collapse-${json.id}" class="button-collapse account-card__permalink" aria-label="Näytä käyttäjän ${acct} lisätiedot" aria-expanded="false" aria-controls="user-${json.id}">\
                 <span class="screen-reader-text">Näytä lisätiedot</span>\
               </button>\

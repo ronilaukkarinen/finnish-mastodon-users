@@ -92,18 +92,6 @@ function lookupUsers() {
         // If we have not checked in 1 hour or following status does not exist
         if (moment().diff(listedUsers[i].checked_at, 'hours') > 1 || listedUsers[i].following == undefined) {
 
-          // Add styles to see which user is being checked
-          document.querySelectorAll('[data-user-name="'+ listedUsers[i].acct +'@'+ listedUsers[i].instance +'"]').forEach(function(element) {
-              element.classList.add('checking-user');
-          });
-
-          // When user has been checked, remove styles
-          setTimeout(function() {
-            document.querySelectorAll('[data-user-name="'+ listedUsers[i].acct +'@'+ listedUsers[i].instance +'"]').forEach(function(element) {
-              element.classList.remove('checking-user');
-            });
-          }, 1000);
-
           // Then check following status from relationship endpoint
           fetch(`${authed_user_instance}/api/v1/accounts/relationships?id[]=${json.id}`, {
             headers: {
@@ -113,7 +101,15 @@ function lookupUsers() {
           .then(response => response.json())
           .then(json_relationship => {
 
-            console.log(json_relationship[0]);
+              // Add styles to see which user is being checked
+              document.querySelectorAll('[data-user-name="'+ listedUsers[i].acct + '"]').forEach(function(element) {
+                // Add class and then remove it after 1 second
+                element.classList.add('checking-user');
+
+                setTimeout(function() {
+                  element.classList.remove('checking-user');
+                }, 1000);
+              });
 
               // Check if following is true and checked_at is defined and it's not within 1 hour
               if (json_relationship[0].following) {
@@ -130,7 +126,7 @@ function lookupUsers() {
 
                 // Add following class to user
                 // Remove following class from user that has the correct [data-user-name]
-                document.querySelectorAll('[data-user-name="'+ listedUsers[i].acct +'@'+ listedUsers[i].instance +'"]').forEach(function(element) {
+                document.querySelectorAll('[data-user-name="'+ listedUsers[i].acct + '"]').forEach(function(element) {
                   element.classList.add('following');
                 });
 
@@ -160,7 +156,7 @@ function lookupUsers() {
                 document.getElementById('user-'+ listedUsers[i].id).setAttribute('id', 'user-'+ json_relationship[0].id);
 
                 // Remove following class from user that has the correct [data-user-name]
-                document.querySelectorAll('[data-user-name="'+ listedUsers[i].acct +'@'+ listedUsers[i].instance +'"]').forEach(function(element) {
+                document.querySelectorAll('[data-user-name="'+ listedUsers[i].acct + '"]').forEach(function(element) {
                   element.classList.remove('following');
                 });
 
