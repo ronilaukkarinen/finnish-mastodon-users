@@ -99,6 +99,8 @@ function lookupUsers() {
       if (userAmount == i) {
         document.getElementById('heading-users-title').innerHTML = `Käyttäjät`;
         document.getElementById('user-count').innerHTML = `${userAmount}`;
+        document.getElementById('heading-users-title').classList.remove('checking');
+        document.getElementById('user-count').classList.remove('checking');
       }
 
       // If current user has local storage set to not null
@@ -389,6 +391,10 @@ function filterFollowedUsers() {
 
   // If filterFollowed is checked, filter out users we're already following
   if ( filterFollowed.checked ) {
+    // Re-calculate the amount of users we're following
+    followingCount = document.getElementsByClassName('following').length;
+    localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
+
     // Hide all elements that have a following class
     const following = document.getElementsByClassName('following');
     for (let i = 0; i < following.length; i++) {
