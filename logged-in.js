@@ -52,7 +52,7 @@ function lookupUsers() {
   })
 
   // Get milliseconds for 300 requests per 5 minutes
-  let milliSeondsBetweenUsers = 1000 * 60 * 5 / 300;
+  let milliSeondsBetweenUsers = 800 * 60 * 5 / 300;
 
   // Get authed_user_instance from local storage
   authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
@@ -111,8 +111,8 @@ function lookupUsers() {
                 }, 1000);
               });
 
-              // Check if following is true and checked_at is defined and it's not within 1 hour
-              if (json_relationship[0].following) {
+              // Check if following is true and if it's not me
+              if (json_relationship[0].following == true && json_relationship[0].id) {
                 console.log('Checked relationship, found an user we are following: ' + listedUsers[i].acct);
 
                 // Save checked_at to local storage
@@ -399,15 +399,19 @@ document.addEventListener('DOMContentLoaded', function() {
   // Get access token from local storage
   access_token = localStorage.getItem('finnish_mastodon_users_access_token');
 
-  if ( access_token ) {
-    // Remove hidden from #filter-followed-container
-    document.getElementById('filter-followed-container').removeAttribute('hidden');
+  // Delay, otherwise won't have time to get access token from local storage
+  setTimeout(function() {
+    if ( access_token ) {
 
-    // Listener for filter-followed checkbox
-    document.getElementById('filter-followed').addEventListener('change', function() {
-      filterFollowedUsers();
-    });
-  }
+      // Remove hidden from #filter-followed-container
+      document.getElementById('filter-followed-container').removeAttribute('hidden');
+
+      // Listener for filter-followed checkbox
+      document.getElementById('filter-followed').addEventListener('change', function() {
+        filterFollowedUsers();
+      });
+    }
+  }, 1000);
 
   // If button has has-no-action class, add event listener to open profile in new window
   document.addEventListener("click", function(e) {
