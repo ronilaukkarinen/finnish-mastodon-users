@@ -377,14 +377,8 @@ function unFollowAction(e) {
 }
 
 function filterFollowedUsers() {
-  // Get users from local storage
-  let listedUsers = JSON.parse(localStorage.getItem('finnish_mastodon_users')) || [];
-
   // Get following count from local storage
   const followingCount = localStorage.getItem('finnish_mastodon_users_following_count');
-
-  // Get authed user's ID from local storage
-  const authedUserID = localStorage.getItem('finnish_mastodon_user_authed_id');
 
   // Get filterFollowed checkbox
   const filterFollowed = document.getElementById('filter-followed');
@@ -439,6 +433,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Remove hidden from #filter-followed-container
       document.getElementById('filter-followed-container').removeAttribute('hidden');
+
+      // Add .has-filtering class to .heading class
+      document.querySelector('.heading').classList.add('has-filtering');
 
       // Listener for filter-followed checkbox
       document.getElementById('filter-followed').addEventListener('change', function() {
