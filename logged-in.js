@@ -96,7 +96,7 @@ function lookupUsers() {
       document.getElementById('user-count').innerHTML = `${i}/${userAmount}`;
 
       // Restore title to "Users" and user count to the original number when userAmount is same than calculated amount
-      if (userAmount == i) {
+      if ((userAmount - 5) == i) {
         document.getElementById('heading-users-title').innerHTML = `Käyttäjät`;
         document.getElementById('user-count').innerHTML = `${userAmount}`;
         document.getElementById('heading-users-title').classList.remove('checking');
