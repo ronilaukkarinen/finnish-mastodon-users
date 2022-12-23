@@ -65,6 +65,9 @@ $files = array_diff( scandir( $dir ), array( '..', '.', 'usercount.json' ) );
 // Count files
 $count = count( $files );
 
+// Remove one being usercount.json
+$count = $count - 1; // phpcs:ignore
+
 // Save count to file
 file_put_contents( $dir . '/usercount.json', $count );
 

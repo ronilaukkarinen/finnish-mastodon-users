@@ -30,13 +30,13 @@ function auth() {
   } else {
 
     // Save instance URL to local storage
-    localStorage.setItem('finnish_mastodon_user_authed_instance', authInstance.value);
+    localStorage.setItem('finnish_mastodon_user_authed_instance_url', authInstance.value);
 
     // Add instance URL as variable
-    const authedInstance = localStorage.getItem('finnish_mastodon_user_authed_instance');
+    const authedInstanceUrl = localStorage.getItem('finnish_mastodon_user_authed_instance_url');
 
     // Authorize with our own auth.php file from current location
-    const auth = new URL(window.location.href + "auth.php?instance=" + authedInstance);
+    const auth = new URL(window.location.href + "auth.php?instance=" + authedInstanceUrl);
 
     // Go to Mastodon auth page
     window.location.href = `${auth}`;
@@ -49,13 +49,13 @@ function revoke() {
   const authButton = document.getElementById('button-auth');
 
   // Instance URL
-  const authedInstance = localStorage.getItem('finnish_mastodon_user_authed_instance');
+  const authedInstanceUrl = localStorage.getItem('finnish_mastodon_user_authed_instance_url');
 
   // Clear the value of the instance URL field
   document.getElementById('auth-instance').value = '';
 
   // Remove the instance URL from local storage
-  localStorage.removeItem('finnish_mastodon_user_authed_instance');
+  localStorage.removeItem('finnish_mastodon_user_authed_instance_url');
 
   // Change button text
   authButton.innerText = 'Kirjaudu sisään';
@@ -78,7 +78,7 @@ function revoke() {
   document.cookie = "finnish_mastodon_users_instance=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
   // Revoke access token with our own auth.php file
-  const revoke = new URL(window.location.href + "auth.php?instance=" + authedInstance + "&revoke=true");
+  const revoke = new URL(window.location.href + "auth.php?instance=" + authedInstanceUrl + "&revoke=true");
   window.location.href = `${revoke}`;
 }
 
@@ -115,14 +115,45 @@ addEventListener('DOMContentLoaded', () => {
     // Remove finnish_mastodon_users_count from local storage
     localStorage.removeItem('finnish_mastodon_users_count');
 
-    // Remove finnish_mastodon_users_count from local storage
-    localStorage.removeItem('finnish_mastodon_users_count');
-
     // Remove instance name from local storage
     localStorage.removeItem('finnish_mastodon_users_authed_user_id');
 
-    // Remove instance name from local storage
-    localStorage.removeItem('finnish_mastodon_user_authed_instance');
+    // Remove instance URL from local storage
+    localStorage.removeItem('finnish_mastodon_user_authed_instance_url');
+
+    // Remove finnish_mastodon_users_authed_user_acct
+    localStorage.removeItem('finnish_mastodon_users_authed_user_acct');
+
+    // Remove finnish_mastodon_users_authed_user_instance
+    localStorage.removeItem('finnish_mastodon_users_authed_user_instance');
+
+    // Remove finnish_mastodon_users_list_has_been_updated
+    localStorage.removeItem('finnish_mastodon_users_list_has_been_updated');
+
+    // Remove finnish_mastodon_users_timestamp
+    localStorage.removeItem('finnish_mastodon_users_timestamp');
+
+    // Remove finnish_mastodon_users_authed_user_url
+    localStorage.removeItem('finnish_mastodon_users_authed_user_url');
+
+    // Remove finnish_mastodon_users_last_updated
+    localStorage.removeItem('finnish_mastodon_users_last_updated');
+
+    // Remove finnish_mastodon_users_to_be_checked
+    localStorage.removeItem('finnish_mastodon_users_to_be_checked');
+
+    // Remove finnish_mastodon_users_following_count
+    localStorage.removeItem('finnish_mastodon_users_checked_amount');
+
+    // Remove finnish_mastodon_users_not_checked_amount
+    localStorage.removeItem('finnish_mastodon_users_not_checked_amount');
+
+    // Remove all finnish_mastodon_user_follow_status_*
+    for (let i = 0; i < localStorage.length; i++) {
+      if (localStorage.key(i).includes('finnish_mastodon_user_follow_status_')) {
+        localStorage.removeItem(localStorage.key(i));
+      }
+    }
 
     // Clear logout from URL
     window.history.replaceState({}, document.title, "/" + window.location.pathname.split("/")[1] + "/");
@@ -147,7 +178,7 @@ addEventListener('DOMContentLoaded', () => {
     authButton.innerText = 'Kirjaudu ulos';
 
     // Lock instance URL field and add instance URL to it
-    authInstance.value = localStorage.getItem('finnish_mastodon_user_authed_instance');
+    authInstance.value = localStorage.getItem('finnish_mastodon_user_authed_instance_url');
     authInstance.setAttribute('readonly', true);
 
     // Add event listener to logout button

@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
               // If we have access_token, let's have the authetintaced user's instance for easier following if the follow functionality is not working
               if ( access_token ) {
                 // Get authed_user_instance from local storage
-                authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance');
+                authed_user_instance = localStorage.getItem('finnish_mastodon_user_authed_instance_url');
                 instance_link = `${authed_user_instance}/@${user}`;
 
                 // Follow button for logged in users
@@ -169,27 +169,23 @@ document.addEventListener('DOMContentLoaded', () => {
               // Save timestamp of the last time user list has been generated
               localStorage.setItem('finnish_mastodon_users_timestamp', Date.now());
 
-              // Push all users to a local storage array if they're not already there but only for the max users
+              // Define user list
               let listedUsers = JSON.parse(localStorage.getItem('finnish_mastodon_users')) || [];
 
-              // If the listed user has following parameter, don't add it to the list
-              if (listedUsers.find(user => user.following)) {
-                return;
-              }
-
+              // Push all users to a local storage array if they're not already there but only for the max users
               listedUsers.push({
                 "id": user_id,
                 "acct": acct,
-                "instance": instance,
+                "instance": user_instance,
               });
 
+              // Get lenght of ul li
+              realUserCount = document.getElementById('user-list').getElementsByTagName('li').length;
+
               // If there's already amount of users in local storage, don't add more
-              if ( listedUsers.length <= localStorage.getItem('finnish_mastodon_users_count') ) {
+              if (listedUsers.length <= realUserCount) {
                 localStorage.setItem('finnish_mastodon_users', JSON.stringify(listedUsers))
               }
-
-              // Get user count number from local storage
-              const realUserCount = localStorage.getItem('finnish_mastodon_users_count');
 
               // Determine when counter is the user count amount
               if (counter > realUserCount - 4) {

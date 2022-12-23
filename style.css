@@ -546,6 +546,8 @@ a.account-card__permalink:hover {
 }
 
 #filter-followed-container.input.boolean .label_input {
+  align-items: center;
+  display: flex;
   margin-top: 0;
 }
 
