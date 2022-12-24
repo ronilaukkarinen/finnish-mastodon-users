@@ -68,15 +68,15 @@ function preCheckUsers() {
   // Loop through listedUsers
   for (let i = 0; i < listedUsers.length; i++) {
 
+    // Get authed user acct
+    let authed_user = localStorage.getItem('finnish_mastodon_users_authed_user_acct') + '@' + localStorage.getItem('finnish_mastodon_users_authed_user_instance');
+
+    // Get listed user acct
+    let listed_user = listedUsers[i].acct + '@' + listedUsers[i].instance;
+
     // Check if user has been checked
     if ( localStorage.getItem(`finnish_mastodon_user_follow_status_checked_at_${listedUsers[i].id}`) !== null ) {
       usersChecked++;
-
-      // Get authed user acct
-      let authed_user = localStorage.getItem('finnish_mastodon_users_authed_user_acct') + '@' + localStorage.getItem('finnish_mastodon_users_authed_user_instance');
-
-      // Get listed user acct
-      let listed_user = listedUsers[i].acct + '@' + listedUsers[i].instance;
 
       // If it's not me, save it to local storage
       if ( authed_user !== listed_user ) {
@@ -92,7 +92,9 @@ function preCheckUsers() {
       let usersToBeCheckedAmount = localStorage.getItem('finnish_mastodon_users_count') - localStorage.getItem('finnish_mastodon_users_checked_amount');
 
       // Save users not checked amount to local storage
-      localStorage.setItem('finnish_mastodon_users_not_checked_amount', usersToBeCheckedAmount);
+      if ( authed_user !== listed_user ) {
+        localStorage.setItem('finnish_mastodon_users_not_checked_amount', usersToBeCheckedAmount);
+      }
 
       // Define users to be checked list
       usersToBeChecked = JSON.parse(localStorage.getItem('finnish_mastodon_users_to_be_checked')) || [];
@@ -233,10 +235,10 @@ function lookupUsers() {
       // Get user amount
       userAmount = document.querySelectorAll('.account-card').length;
 
-      // If finnish_mastodon_users_not_checked_amount is defined
-      if (localStorage.getItem('finnish_mastodon_users_not_checked_amount')) {
-        // Change to not checked amount
-        userAmount = localStorage.getItem('finnish_mastodon_users_not_checked_amount');
+      // If there's users to be checked
+      if ( localStorage.getItem('finnish_mastodon_users_to_be_checked') ) {
+        // Count amount of users to be checked
+        userAmount = JSON.parse(localStorage.getItem('finnish_mastodon_users_to_be_checked')).length - 1;
       }
 
       // Add class checking to heading-users-title and user-count
@@ -247,7 +249,9 @@ function lookupUsers() {
       document.getElementById('user-count').innerHTML = `${i}/${userAmount}`;
 
       // Restore title to "Users" and user count to the original number when userAmount is same than calculated amount
-      if (i == (userAmount - 5)) {
+      if (i == userAmount) {
+        // Restore full user amount
+        userAmount = document.querySelectorAll('.account-card').length;
         document.getElementById('heading-users-title').innerHTML = `Käyttäjät`;
         document.getElementById('user-count').innerHTML = `${userAmount}`;
         document.getElementById('heading-users-title').classList.remove('checking');
