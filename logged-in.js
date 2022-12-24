@@ -115,55 +115,81 @@ function preCheckUsers() {
       }
     }
 
-    // Check if user we are following the user
-    if ( localStorage.getItem(`finnish_mastodon_user_follow_status_${listedUsers[i].id}`) === 'true' ) {
-      console.log('Quickly pre-checked user, we are following: ' + listedUsers[i].acct);
+    // Transform checked at time to a format we can compare to Date.now()
+    let checkedAt = new Date(localStorage.getItem(`finnish_mastodon_user_follow_status_checked_at_${listedUsers[i].id}`)).getTime();
 
-      // Add following class to user
-      if ( document.getElementById('user-'+ listedUsers[i].id) ) {
-        document.getElementById('user-'+ listedUsers[i].id).classList.add('following');
+    // Check again if hour has passed since last check
+    if ( localStorage.getItem(`finnish_mastodon_user_follow_status_checked_at_${listedUsers[i].id}`) !== null && checkedAt < Date.now() - 3600000 ) {
+      console.log('Quickly pre-checked user, we have not checked in an hour: ' + listedUsers[i].acct);
+
+      // Define amount of users to be checked
+      let usersToBeCheckedAmount = localStorage.getItem('finnish_mastodon_users_count') - localStorage.getItem('finnish_mastodon_users_checked_amount');
+
+      // Save users not checked amount to local storage
+      if ( authed_user !== listed_user ) {
+        localStorage.setItem('finnish_mastodon_users_not_checked_amount', usersToBeCheckedAmount);
       }
 
-      // Set following count to local storage
-      followingCount = document.getElementsByClassName('following').length;
-      localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
+      // Define users to be checked list
+      usersToBeChecked = JSON.parse(localStorage.getItem('finnish_mastodon_users_to_be_checked')) || [];
 
-      if (document.getElementById('button-action-'+ listedUsers[i].id)) {
-        // Remove has-no-action class from button
-        document.getElementById('button-action-'+ listedUsers[i].id).classList.remove('has-no-action');
+      // Get users we are not following and add them to a local storage
+      usersToBeChecked.push({
+        id: listedUsers[i].id,
+        acct: listedUsers[i].acct,
+        instance: listedUsers[i].instance
+      });
 
-        // Add has-unfollow-action class to button
-        document.getElementById('button-action-'+ listedUsers[i].id).classList.add('has-unfollow-action');
+      // Get current user count
+      let currentUserCount = i - localStorage.getItem('finnish_mastodon_users_checked_amount');
 
-        // Update text to button
-        document.getElementById('button-action-'+ listedUsers[i].id).innerHTML = 'Lopeta seuraaminen';
+      // Add user to local storage if the number of users to be checked is more than the max amount of users to be checked
+      if (currentUserCount <= usersToBeCheckedAmount) {
+        localStorage.setItem('finnish_mastodon_users_to_be_checked', JSON.stringify(usersToBeChecked));
       }
-    } else if ( localStorage.getItem(`finnish_mastodon_user_follow_status_${listedUsers[i].id}`) === 'false' ) {
-      console.log('Quickly pre-cheked user, we are not following: ' + listedUsers[i].acct);
 
-      // Remove following class from user
-      document.getElementById('user-'+ listedUsers[i].id).classList.remove('following');
+    } else {
 
-      if (document.getElementById('button-action-'+ listedUsers[i].id)) {
-        // Remove has-unfollow-action class from button
-        document.getElementById('button-action-'+ listedUsers[i].id).classList.remove('has-unfollow-action');
+      // Check if user we are following the user
+      if ( localStorage.getItem(`finnish_mastodon_user_follow_status_${listedUsers[i].id}`) === 'true' ) {
+        console.log('Quickly pre-checked user, we are following: ' + listedUsers[i].acct);
 
-        // Add has-follow-action class to button
-        document.getElementById('button-action-'+ listedUsers[i].id).classList.add('has-follow-action');
+        // Add following class to user
+        if ( document.getElementById('user-'+ listedUsers[i].id) ) {
+          document.getElementById('user-'+ listedUsers[i].id).classList.add('following');
+        }
 
-        // Update text to button
-        document.getElementById('button-action-'+ listedUsers[i].id).innerHTML = 'Seuraa';
+        // Set following count to local storage
+        followingCount = document.getElementsByClassName('following').length;
+        localStorage.setItem('finnish_mastodon_users_following_count', followingCount);
+
+        if (document.getElementById('button-action-'+ listedUsers[i].id)) {
+          // Remove has-no-action class from button
+          document.getElementById('button-action-'+ listedUsers[i].id).classList.remove('has-no-action');
+
+          // Add has-unfollow-action class to button
+          document.getElementById('button-action-'+ listedUsers[i].id).classList.add('has-unfollow-action');
+
+          // Update text to button
+          document.getElementById('button-action-'+ listedUsers[i].id).innerHTML = 'Lopeta seuraaminen';
+        }
+      } else if ( localStorage.getItem(`finnish_mastodon_user_follow_status_${listedUsers[i].id}`) === 'false' ) {
+        console.log('Quickly pre-cheked user, we are not following: ' + listedUsers[i].acct);
+
+        // Remove following class from user
+        document.getElementById('user-'+ listedUsers[i].id).classList.remove('following');
+
+        if (document.getElementById('button-action-'+ listedUsers[i].id)) {
+          // Remove has-unfollow-action class from button
+          document.getElementById('button-action-'+ listedUsers[i].id).classList.remove('has-unfollow-action');
+
+          // Add has-follow-action class to button
+          document.getElementById('button-action-'+ listedUsers[i].id).classList.add('has-follow-action');
+
+          // Update text to button
+          document.getElementById('button-action-'+ listedUsers[i].id).innerHTML = 'Seuraa';
+        }
       }
-    }
-
-    // Add user to check list when hour is passed and we are following
-    if ( localStorage.getItem(`finnish_mastodon_user_follow_status_${listedUsers[i].id}`) === 'true' && localStorage.getItem(`finnish_mastodon_user_follow_status_checked_at_${listedUsers[i].id}` ) < (Date.now() - 3600000) ) {
-      console.log('Quickly pre-checked user, we are following and hour has passed: ' + listedUsers[i].acct);
-    }
-
-    // Add user to check list when hour is passed and we are not following
-    if ( localStorage.getItem(`finnish_mastodon_user_follow_status_${listedUsers[i].id}`) === 'false' && localStorage.getItem(`finnish_mastodon_user_follow_status_checked_at_${listedUsers[i].id}`) < (Date.now() - 3600000) ) {
-      console.log('Quickly pre-checked user, we are not following and hour has passed: ' + listedUsers[i].acct);
     }
   }
 }
@@ -260,73 +286,13 @@ function lookupUsers() {
         document.getElementById('user-count').classList.remove('checking');
       }
 
-      // If current user has local storage not set to not null
-      if (localStorage.getItem('finnish_mastodon_user_follow_status_'+ listedUsers[i].id) !== null) {
-
-        // If we are following the current user
-        if ( localStorage.getItem(`finnish_mastodon_user_follow_status_${listedUsers[i].id}`) === 'true' ) {
-          console.log('Already checked, we are following: ' + listedUsers[i].acct);
-
-          // Add following class to user
-          if ( document.getElementById('user-'+ listedUsers[i].id) ) {
-            document.getElementById('user-'+ listedUsers[i].id).classList.add('following');
-          }
-
-          // If button-action-{id} exists
-          if (document.getElementById('button-action-'+ listedUsers[i].id)) {
-
-            // Remove has-no-action class from button
-            document.getElementById('button-action-'+ listedUsers[i].id).classList.remove('has-no-action');
-
-            // Add has-unfollow-action class to button
-            document.getElementById('button-action-'+ listedUsers[i].id).classList.add('has-unfollow-action');
-
-            // Update text to button
-            document.getElementById('button-action-'+ listedUsers[i].id).innerHTML = 'Lopeta seuraaminen';
-          }
-        } else {
-
-          console.log('We have already checked before, we are not following: ' + listedUsers[i].acct);
-
-          // Remove following class from user
-          document.getElementById('user-'+ listedUsers[i].id).classList.remove('following');
-
-          // If button-action-{id} exists
-          if (document.getElementById('button-action-'+ listedUsers[i].id)) {
-            // Add has-no-action class to button
-            document.getElementById('button-action-'+ listedUsers[i].id).classList.add('has-no-action');
-
-            // Remove has-unfollow-action class from button
-            document.getElementById('button-action-'+ listedUsers[i].id).classList.remove('has-unfollow-action');
-
-            // Add follow action to button
-            document.getElementById('button-action-'+ listedUsers[i].id).classList.add('has-follow-action');
-
-            // Update text to button
-            document.getElementById('button-action-'+ listedUsers[i].id).innerHTML = 'Seuraa';
-          }
-        }
-
-        // Speed up loop time
-        milliSeondsBetweenUsers = 0;
-
-        // Skip this iteration
-        return;
-      }
-
       // First use look up endpoint to webfinger
       fetch(`${authed_user_instance_url}/api/v1/accounts/lookup?acct=${listedUsers[i].acct}@${listedUsers[i].instance}`)
       .then(response => response.json())
       .then(json => {
 
-        // Reset loop time
-        milliSeondsBetweenUsers = 800 * 60 * 5 / 300;
-
         // Get access token from local storage
         access_token = localStorage.getItem('finnish_mastodon_users_access_token');
-
-        // If finnish_mastodon_user_follow_status_checked_at is not set or older than 1 hour
-        if (localStorage.getItem('finnish_mastodon_user_follow_status_checked_at_'+ listedUsers[i].id) == null || moment().diff(moment(localStorage.getItem('finnish_mastodon_user_follow_status_checked_at_'+ listedUsers[i].id)), 'hours') > 1) {
 
           // Then check following status from relationship endpoint
           fetch(`${authed_user_instance_url}/api/v1/accounts/relationships?id[]=${json.id}`, {
@@ -426,7 +392,7 @@ function lookupUsers() {
               });
             }
           });
-        }
+
       });
     }, milliSeondsBetweenUsers * i);
   }
