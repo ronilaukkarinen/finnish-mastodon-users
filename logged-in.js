@@ -120,7 +120,9 @@ function preCheckUsers() {
       console.log('Quickly pre-checked user, we are following: ' + listedUsers[i].acct);
 
       // Add following class to user
-      document.getElementById('user-'+ listedUsers[i].id).classList.add('following');
+      if ( document.getElementById('user-'+ listedUsers[i].id) ) {
+        document.getElementById('user-'+ listedUsers[i].id).classList.add('following');
+      }
 
       // Set following count to local storage
       followingCount = document.getElementsByClassName('following').length;
@@ -266,7 +268,9 @@ function lookupUsers() {
           console.log('Already checked, we are following: ' + listedUsers[i].acct);
 
           // Add following class to user
-          document.getElementById('user-'+ listedUsers[i].id).classList.add('following');
+          if ( document.getElementById('user-'+ listedUsers[i].id) ) {
+            document.getElementById('user-'+ listedUsers[i].id).classList.add('following');
+          }
 
           // If button-action-{id} exists
           if (document.getElementById('button-action-'+ listedUsers[i].id)) {
