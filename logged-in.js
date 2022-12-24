@@ -231,7 +231,7 @@ function lookupUsers() {
   })
 
   // Get milliseconds for 300 requests per 5 minutes
-  let milliSeondsBetweenUsers = 800 * 60 * 5 / 300;
+  let milliSeondsBetweenUsers = 400 * 60 * 5 / 300;
 
   // Get authed_user_instance from local storage
   authed_user_instance_url = localStorage.getItem('finnish_mastodon_user_authed_instance_url');
@@ -316,7 +316,9 @@ function lookupUsers() {
               }
 
               // Update id with relationship json id
-              document.getElementById('user-'+ listedUsers[i].id).setAttribute('id', 'user-'+ json_relationship[0].id);
+              if (document.getElementById('user-'+ listedUsers[i].id)) {
+                document.getElementById('user-'+ listedUsers[i].id).setAttribute('id', 'user-'+ json_relationship[0].id);
+              }
 
               // Add following class to user
               // Remove following class from user that has the correct [data-user-name]
