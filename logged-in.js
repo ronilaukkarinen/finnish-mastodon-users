@@ -46,7 +46,7 @@ function checkMe() {
     if ( authed_user === user ) {
       // Replace .button-action with a
       if ( user_list_li[i].querySelector('.button-action') !== null ) {
-        user_list_li[i].querySelector('.button-action').outerHTML = `<a href="${localStorage.getItem('finnish_mastodon_user_authed_instance_url')}/settings/profile" class="button button-me">Muokkaa profiilia</a>`;
+        user_list_li[i].querySelector('.button-action').outerHTML = `<a href="${localStorage.getItem('finnish_mastodon_user_authed_instance_url')}/settings/profile" class="button button-action button-me">Muokkaa profiilia</a>`;
       }
     }
   }
@@ -418,7 +418,7 @@ function lookupUsers() {
               // Get .button-action under [data-user-name]
               document.querySelectorAll('[data-user-name="'+ listedUsers[i].acct + '"] .account-card__actions__button').forEach(function(element) {
                 // Replace button with a
-                element.innerHTML = '<a href="'+ authed_user_instance_url +'/settings/profile" class="button button-me">Muokkaa profiilia</a>';
+                element.innerHTML = '<a href="'+ authed_user_instance_url +'/settings/profile" class="button button-action button-me">Muokkaa profiilia</a>';
               });
             }
           });
