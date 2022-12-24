@@ -207,40 +207,11 @@ function lookupUsers() {
     listedUsers = JSON.parse(localStorage.getItem('finnish_mastodon_users'));
   }
 
-  // Get last modified time response header of following_accounts.csv file with fetch
-  fetch('following_accounts.csv', {
-    method: 'HEAD'
-  })
-  // Add last modified premise to element
-  .then(response => {
-
-    const lastUpdated = response.headers.get('Last-Modified');
-    const lastUpdatedDate = moment(lastUpdated);
-
-    // If last updated time is different from local storage
-    if (lastUpdatedDate != localStorage.getItem('finnish_mastodon_users_last_updated')) {
-
-      // Save last updated time to local storage
-      localStorage.setItem('finnish_mastodon_users_last_updated', lastUpdatedDate);
-
-      // Save info about the update in local storage
-      localStorage.setItem('finnish_mastodon_users_list_has_been_updated', 'true');
-    } else {
-      localStorage.setItem('finnish_mastodon_users_list_has_been_updated', 'false');
-    }
-  })
-
   // Get milliseconds for 300 requests per 5 minutes
   let milliSeondsBetweenUsers = 400 * 60 * 5 / 300;
 
   // Get authed_user_instance from local storage
   authed_user_instance_url = localStorage.getItem('finnish_mastodon_user_authed_instance_url');
-
-  // If Finnish mastodon user list has not been updated and listedUsers exists, do nothing
-  if (localStorage.getItem('finnish_mastodon_users_list_has_been_updated') == 'false' && listedUsers.length > 0) {
-    console.log('Finnish mastodon user list has not been updated and listedUsers exists, do nothing');
-    return;
-  }
 
   // All endpoints and methods can be called 300 times within 5 minutes
   // Run for loop one per second
