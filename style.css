@@ -714,6 +714,16 @@ input[type="search"]::-webkit-search-cancel-button {
     display: block;
   }
 
+  .integration-functionality .auth-input {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .integration-functionality .button#button-auth {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+
   .button#button-auth {
     height: 43px;
     width: 100%;
