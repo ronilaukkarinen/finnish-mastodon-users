@@ -66,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
           .then(json => {
             let user_id = json.id;
             let acct = json.acct;
+            let username = json.username;
             let display_name = json.display_name;
             let bio = json.note;
                 display_name = twemoji.parse(display_name, {className: "emojione"});
@@ -80,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
               access_token = localStorage.getItem('finnish_mastodon_users_access_token');
 
               // Default to the original instance
-              let instance_link = `https://${user_instance}/@${acct}`;
+              let instance_link = `https://${user_instance}/@${username}`;
 
               // Follow button for logged out users
               let followButton = `<a id="button-action-${json.id}" href="${instance_link}" class="button button-action" aria-label="Mene käyttäjän ${acct} profiiliin">Profiili</a>`;
