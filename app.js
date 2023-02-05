@@ -58,10 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
             user = acct + "@testausserveri.fi";
           }
 
-          if (user_instance === "vivaldi.net") {
-            user = acct + "@social.vivaldi.net";
-          }
-
           // Use my own instance instead to avoid rate limits
           instance = "mementomori.social";
 
@@ -86,6 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
               // Default to the original instance
               let instance_link = `https://${user_instance}/@${username}`;
+
+              // Exception for Vivaldi
+              if (user_instance === "vivaldi.net") {
+                instance_link = `https://social.vivaldi.net/@${username}`;
+              }
 
               // Follow button for logged out users
               let followButton = `<a id="button-action-${json.id}" href="${instance_link}" class="button button-action" aria-label="Mene käyttäjän ${acct} profiiliin">Profiili</a>`;
