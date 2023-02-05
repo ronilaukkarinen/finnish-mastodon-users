@@ -58,6 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
             user = acct + "@testausserveri.fi";
           }
 
+          if (user_instance === "vivaldi.net") {
+            user = acct + "@social.vivaldi.net";
+          }
+
           // Use my own instance instead to avoid rate limits
           instance = "mementomori.social";
 
