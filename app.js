@@ -69,8 +69,14 @@ document.addEventListener('DOMContentLoaded', () => {
             let username = json.username;
             let display_name = json.display_name;
             let bio = json.note;
-                display_name = twemoji.parse(display_name, {className: "emojione"});
-                bio = twemoji.parse(bio, {className: "emojione"});
+                display_name = twemoji.parse(display_name, {
+                  className: "emojione",
+                  base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/'
+                });
+                bio = twemoji.parse(bio, {
+                  className: "emojione",
+                  base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/'
+                });
 
               // If display name is empty, use username
               if (display_name === "") {
