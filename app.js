@@ -71,10 +71,14 @@ document.addEventListener('DOMContentLoaded', () => {
             let bio = json.note;
                 display_name = twemoji.parse(display_name, {
                   className: "emojione",
+                  folder: 'svg',
+                  ext: '.svg',
                   base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/'
                 });
                 bio = twemoji.parse(bio, {
                   className: "emojione",
+                  folder: 'svg', 
+                  ext: '.svg',
                   base: 'https://cdn.jsdelivr.net/gh/twitter/twemoji@latest/assets/'
                 });
 
